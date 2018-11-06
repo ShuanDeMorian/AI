@@ -11,7 +11,7 @@ Attention Network란 사람이 그림을 볼 때 특정 부분에 Attention을 �
 
 
 # Transformer Model Architecture
-![Transformer_Model_Architecture](./image/Transformer_Model_Architecture.png)
+![Transformer_Model_Architecture](./image/Transformer_model_architecture.png)
 
 
 # 참고자료
