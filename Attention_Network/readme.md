@@ -9,7 +9,7 @@ Attention Network란 사람이 그림을 볼 때 특정 부분에 Attention을 �
 RNN 모델은 input과 output sequence의 position들을 계산하는데 뛰어나다. 이 position대로 순서대로 연산을 하면서, 이전 hidden state <strong><i>h<sub>t-1</sub></i></strong>와 그 position의 input <strong><i>t</i></strong>를 통해 새로운 hidden state <strong><i>h<sub>t</sub></i></strong>를 만들어 낸다. 따라서 구조상 sequential한 특성을 가지고 있기에, 이는 parallelization에 취약하다는 단점이 있다. 이는 sequence길이가 길어진 경우 batch로써 풀고자 할 때 큰 문제가 된다.
 
 # Attention Model의 장점
-* <strong><span style="color:red">해석 가능하다(interpretable)!!!!!!</span></strong>(model이 어디에 attention을 줘서 그러한 결론을 내렸는지 알 수 있다)
+* <strong><font color = red>해석 가능하다(interpretable)!!!!!!</font></strong>(model이 어디에 attention을 줘서 그러한 결론을 내렸는지 알 수 있다)
 * 각각 layer마다 필요로 하는 총 computing cost가 줄어든다.
 * 병렬화가 가능한 computation이 늘어난다.(sequential operation을 필요로 하는 부분이 줄어든다)
 * 신경망 내에서 long-range dependencies를 잇는 path length가 줄어든다.
