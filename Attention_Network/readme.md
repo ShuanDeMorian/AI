@@ -27,4 +27,5 @@ RNN 모델은 input과 output sequence의 position들을 계산하는데 뛰어�
 3. 수업자료
 4. Parallelization : https://www.computerhope.com/jargon/p/parallelization.htm
 5. 블로그 - 논문 요약 Attention Is All You Need : https://hist0134.blog.me/221035988217
+6. Sequence to Sequence 네트워크와 Attention을 이용한 번역 : https://9bow.github.io/PyTorch-tutorials-kr-0.3.1/intermediate/seq2seq_translation_tutorial.html
 
