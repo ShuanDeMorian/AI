@@ -6,6 +6,7 @@
 2. bi-LSTM
 3. CNN
 4. GRU
+5. LEAM(Label Embedding Attentive Model)
 
 ## 1. 논문 : Hierarchical Attention Networks for Document Classification
 https://www.cs.cmu.edu/~hovy/papers/16HLT-hierarchical-attention-networks.pdf
