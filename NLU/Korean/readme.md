@@ -10,3 +10,7 @@ character : '해', '달'
 jamo : 'ㅎ,ㅐ,e', 'ㄷ,ㅏ,ㄹ'
 
 해의 경우 마지막 종성이 없어서 이걸 표시해주기 위해 e를 넣어준다. 
+
+다만 이 방법의 경우 pre-trained된 임베딩 벡터가 없어 직접 훈련을 시켜주어야 한다는 단점이 있다. 
+논문에 대학원생이 WS353을 직접 영어에서 한국어로 번역한 evaluation set가 다음 github에서 찾아볼 수 있다.  
+https://github.com/SungjoonPark/KoreanWordVectors
