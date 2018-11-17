@@ -2,12 +2,13 @@
 
 모델 10개 찾고 장단점 적기
 
-<p>전통적인 머신러닝에 기반한 모델(SVM/로지스틱 회귀)</p>
+## 전통적인 머신러닝에 기반한 모델(SVM/로지스틱 회귀 등)
 사람이 직접 추출한(hand-crafted) 피처에 강하게 의존, 이러한 피처들은 추출하는 데 시간이 많이 소요되고 많은 경우 불완전함
 
-<p>딥러닝 모델</p>
+## 딥러닝 모델(CNN,RNN, Recursive NN 등)
 자동화된 피처 추출 및 표현(multi-level automatic feature representation learning) 
 
+## 모델들
 1. RNN
 RNN은 신경망 속 셀의 현재 출력 결과가 이전의 계산 결과에 영향을 받는 인공신경망 모델이다. 다시 말해, 이전 계산 결과에 대한 메모리 정보를 가지고 있어 순차적인 데이터를 학습하는데 장점을 가지고 있다. 기본적인 RNN은 일반적으로 학습이 어려워 다양한 변형이 발생했는데, 그 중 가장 성공적인 모델은 장기-단기 기억 신경망(Long-Short Term Memory: LSTM)과 최근 각광받고 있는 회로형 순환 유닛(Gated Recurrent Units: GRU)이 있다.  
    * 장점 : 반복적이고 순차적인 데이터(Sequential data)학습에 특화, 현재의 학습과 과거의 학습이 연결, 과거의 정보를 통해 미래를 예측, 시간상의 순서가 있는 task에 적절, 이전의 정보를 현재의 문제 해결에 활용할 수 있음, 이벤트의 연속, 리스트에 관련된 문제를 해결하기 적절 
@@ -57,6 +58,8 @@ SVM은 각 클래스간 거리를 최대로 하는 경계선 또는 경계면(hy
 각 사건들이 서로 독립이라는 가정을 한 후, Bayes's theorem을 이용하여 확률을 계산, 분류하는 모델이다. 따라서 두 확률의 결합 확률(Joint Probability)을 두 확률의 곱으로 표현해버리지만, 상당히 강력한 성능을 보이고 있어서 널리 사용된다. Naive Bayesian Classifier는 feature들간의 조건부독립 성질을 이용하는 반면, Multinomial Naive Bayesian Classifier는 feature들이 다항 분표(multinomial distribution)를 따른다는 정보를 활용한다.
     * 장점 : 간단
     * 단점 : 독립이 아닐 수 있는 사건들을 독립으로 가정하므로 한계 존재
+    
+#     
 
 ## 1. 논문 : Hierarchical Attention Networks for Document Classification
 https://www.cs.cmu.edu/~hovy/papers/16HLT-hierarchical-attention-networks.pdf
