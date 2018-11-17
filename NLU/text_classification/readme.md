@@ -2,6 +2,12 @@
 
 모델 10개 찾고 장단점 적기
 
+<p>전통적인 머신러닝에 기반한 모델(SVM/로지스틱 회귀)</p>
+사람이 직접 추출한(hand-crafted) 피처에 강하게 의존, 이러한 피처들은 추출하는 데 시간이 많이 소요되고 많은 경우 불완전함
+
+딥러닝 모델
+자동화된 피처 추출 및 표현(multi-level automatic feature representation learning) 
+
 1. RNN
 RNN은 신경망 속 셀의 현재 출력 결과가 이전의 계산 결과에 영향을 받는 인공신경망 모델이다. 다시 말해, 이전 계산 결과에 대한 메모리 정보를 가지고 있어 순차적인 데이터를 학습하는데 장점을 가지고 있다. 기본적인 RNN은 일반적으로 학습이 어려워 다양한 변형이 발생했는데, 그 중 가장 성공적인 모델은 장기-단기 기억 신경망(Long-Short Term Memory: LSTM)과 최근 각광받고 있는 회로형 순환 유닛(Gated Recurrent Units: GRU)이 있다.  
    * 장점 : 반복적이고 순차적인 데이터(Sequential data)학습에 특화, 현재의 학습과 과거의 학습이 연결, 과거의 정보를 통해 미래를 예측, 시간상의 순서가 있는 task에 적절, 이전의 정보를 현재의 문제 해결에 활용할 수 있음, 이벤트의 연속, 리스트에 관련된 문제를 해결하기 적절 
@@ -113,6 +119,8 @@ https://arxiv.org/pdf/1708.02709.pdf
 딥러닝 기반 자연어처리 연구트렌드 정리한 논문
 한국어 번역 : ratsgo's blog : https://ratsgo.github.io/natural%20language%20processing/2017/08/16/deepNLP/
 
+딥러닝 기법은 데이터의 계층적인 표현(hiarchical representation)을 학습하는 다층 레이어(multiple processing layer)를 사용한다. 
+지난 수십년간 NLP 문제를 풀기 위한 머신러닝의 접근은 고차원이면서 sparse한 피처(feature)를 학습한 ‘얕은 모델(shallow models, 예: SVM/로지스틱 회귀)’에 기반한 것이다. 최근 수 년간 dense vector representation에 기반한 뉴럴네트워크가 다양한 NLP task에서 우수한 성능을 보여줬다. 이러한 트렌드는 워드 임베딩(Milokov et al., 2010, 2013a)과 딥러닝 기법(Socher et al., 2013)의 성공에 힘입은 것이다. 딥러닝은 자동화된 피처 추출 및 표현(multi-level automatic feature representation learning)을 가능하게 한다. 그러나 전통적인 머신러닝에 기반한 NLP 시스템은 사람이 직접 추출한(hand-crafted) 피처에 강하게 의존한다. 이러한 피처들은 추출하는 데 시간이 많이 소요되고 많은 경우 불완전하다.  
 
 
 ## 선형성 모델
