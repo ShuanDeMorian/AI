@@ -9,18 +9,18 @@ RNN은 신경망 속 셀의 현재 출력 결과가 이전의 계산 결과에 �
 
 2. bi-LSTM, LSTM-GRNN
 LSTM은 긴 순차적인 정보를 회로 메커니즘(gating mechanism)을 통해 저장하고 출력할 수 있따. 이 회로 메커니즘은 RNN의 학습을 방해하는 가장 큰 원인인 vanishing gradient 문제를 완화시켜 성능을 크게 향상시켰다. 
-* 장점 : cell gate를 통한 RNN의 장기 의존성 문제 해결(Weight를 계속 기억할지 결정하여 Gradient Vanishing 문제를 해결), 과거의 data를 계속해서 update 하므로, RNN보다 지속적, Cell State는 정보를 추가하거나 삭제하는 기능을 담당, 각각의 메모리 컨트롤 가능, 결과값 컨트롤 가능 
-* 단점 : 메모리가 덮어씌워질 가능성(더 자세히?), 연산속도가 느리다
+    * 장점 : cell gate를 통한 RNN의 장기 의존성 문제 해결(Weight를 계속 기억할지 결정하여 Gradient Vanishing 문제를 해결), 과거의 data를 계속해서 update 하므로, RNN보다 지속적, Cell State는 정보를 추가하거나 삭제하는 기능을 담당, 각각의 메모리 컨트롤 가능, 결과값 컨트롤 가능 
+    * 단점 : 메모리가 덮어씌워질 가능성(더 자세히?), 연산속도가 느리다
 
 3. CNN-char, CNN-word (Convolutional Neural Networks)
 CNN은 사람의 시신경망에서 아이디어를 얻어 고안한 모델로, 다양한 패턴 인식 문제에 사용되고 있다. CNN은 컨볼루션 층, subsampling층(또는 max-pooling층)이라는 두 층을 번갈아가며 수행하다가 마지막에 있는 fully-connected층을 이용하여 분류를 수행한다. 컨볼루션 층은 입력에 대해 2차원 필터링을 수행하고, subsampling층은 매핑된 2차원 이미지에서 최댓값을 추출한다. 이러한 계층구조 속에서 역전파(backpropagation)을 이용, 오차를 최소화하는 방향으로 학습해나간다. 주로 비전 분야에서 얼굴 인식, 필기체 인식 등에 많이 사용되어 왔으나 최근에는 자연어 처리분야에서도 널리 활용되고 있다.
-* 장점 : 데이터에서 feature 추출하여 패턴 파악에 용이, layer size 감소로 Parameter 갯수 효과적으로 축소, 노이즈 상쇄, 미세한 부분에서 일관적인 특징을 제공
-* 단점 :
+    * 장점 : 데이터에서 feature 추출하여 패턴 파악에 용이, layer size 감소로 Parameter 갯수 효과적으로 축소, 노이즈 상쇄, 미세한 부분에서 일관적인 특징을 제공
+    * 단점 :
 
 4. GRU(Gated Recurrent Unit)
 2014년에 LSTM과 동일한 회로 메커니즘을 사용하지만 파라미터 수를 줄인 GRU가 제안되었다. GRU는 리셋 게이트와 업데이트 게이트로 구성되어 있으며, 두 게이트의 상호작용을 통해 학습한다. LSTM보다 적은 파라미터를 사용하기 때문에 이론적으로는 학습 속도가 조금 더 빠르고 완전한 학습에 필요한 데이터가 LSTM보다 적게 필요하다. 그러나 실제 성능으로는 특정 작업에서는 더 뛰어나기도 하고 뒤쳐지기도 한다.
-* 장점 : LSTM 개선하여 더 단순화됨(Update gate(과거의 상태를 반영하는 Gate)와 Reset gate(현시점 정보와 과거시점 정보의 반영 여부를 결정)를 추가하여 과거의 정보를 어떻게 반영할 것인지 결정), 연산속도가 빠르며 메모리가 LSTM처럼 덮여 씌여질 가능성이 없음, LSTM보다 학습속도가 조금 더 빠르고 완전한 학습에 필요한 데이터가 적게 필요하다.
-* 단점 : 메모리와 결과값의 컨트롤이 불가능
+    * 장점 : LSTM 개선하여 더 단순화됨(Update gate(과거의 상태를 반영하는 Gate)와 Reset gate(현시점 정보와 과거시점 정보의 반영 여부를 결정)를 추가하여 과거의 정보를 어떻게 반영할 것인지 결정), 연산속도가 빠르며 메모리가 LSTM처럼 덮여 씌여질 가능성이 없음, LSTM보다 학습속도가 조금 더 빠르고 완전한 학습에 필요한 데이터가 적게 필요하다.
+    * 단점 : 메모리와 결과값의 컨트롤이 불가능
 
 5. LEAM(Label Embedding Attentive Model)
 
@@ -32,25 +32,25 @@ CNN은 사람의 시신경망에서 아이디어를 얻어 고안한 모델로, 
 
 9. SVM(Support Vector Machine)(가장 기초적 classification, linear) TextFeatures
 SVM은 각 클래스간 거리를 최대로 하는 경계선 또는 경계면(hyperplane)을 찾는다. 그리하여 새로운 데이터가 들어 왔을 때 일반화 오류를 최소화하는 모델이다. 이 때 각 클래스에서 데이터까지의 최소 거리를 마진(Margin), 그리고 경계선으로부터의 최소 거리인 데이터벡터를 서포트 벡터(Support Vector)라고 한다. 
-* 장점 : 해석 용이, 적은 Data에서도 적절한 결과가 나온다. 인공 신경망에도 크게 뒤지지 않는 성능을 낸다.
-* 단점 : 주로 단어의 빈도수를 feature로 사용하였기 때문에 해당 단어가 그 문장, 혹은 문단에서 어떤 의미로 쓰였는지 알기 힘들었다. 
+    * 장점 : 해석 용이, 적은 Data에서도 적절한 결과가 나온다. 인공 신경망에도 크게 뒤지지 않는 성능을 낸다.
+    * 단점 : 주로 단어의 빈도수를 feature로 사용하였기 때문에 해당 단어가 그 문장, 혹은 문단에서 어떤 의미로 쓰였는지 알기 힘들었다. 
 
 10. HAN(Hierachical Attention Network) HN-ATT
 
 11. BoW TFIDF, BoW 방법을 이용한 Naive Bayesian Classifier
-* 장점 : 
-* 단점 : 주로 단어의 빈도수를 feature로 사용하였기 때문에 해당 단어가 그 문장, 혹은 문단에서 어떤 의미로 쓰였는지 알기 힘들었다. 
+    * 장점 : 
+    * 단점 : 주로 단어의 빈도수를 feature로 사용하였기 때문에 해당 단어가 그 문장, 혹은 문단에서 어떤 의미로 쓰였는지 알기 힘들었다. 
 
 12. Decision Tree
 
 13. N-gram
-* 장점 : 단어의 의미적 문맥적 정보를 파악, 모든 문서 속 단어들의 의미적, 문맥적인 정보를 완벽하게 파악하지 않아도 적절한 성능이 나옴
-* 단점 : 단순히 여러 단어를 보는 것만으로는 텍스트의 모든 의미 파악하는데 한계 존재, N 값이 커질수록 계산량이 급격히 늘어나는 단점
+    * 장점 : 단어의 의미적 문맥적 정보를 파악, 모든 문서 속 단어들의 의미적, 문맥적인 정보를 완벽하게 파악하지 않아도 적절한 성능이 나옴
+    * 단점 : 단순히 여러 단어를 보는 것만으로는 텍스트의 모든 의미 파악하는데 한계 존재, N 값이 커질수록 계산량이 급격히 늘어나는 단점
 
 14. Naive Bayesian Classifier
 각 사건들이 서로 독립이라는 가정을 한 후, Bayes's theorem을 이용하여 확률을 계산, 분류하는 모델이다. 따라서 두 확률의 결합 확률(Joint Probability)을 두 확률의 곱으로 표현해버리지만, 상당히 강력한 성능을 보이고 있어서 널리 사용된다. Naive Bayesian Classifier는 feature들간의 조건부독립 성질을 이용하는 반면, Multinomial Naive Bayesian Classifier는 feature들이 다항 분표(multinomial distribution)를 따른다는 정보를 활용한다.
-* 장점 : 간단
-* 단점 : 독립이 아닐 수 있는 사건들을 독립으로 가정하므로 한계 존재
+    * 장점 : 간단
+    * 단점 : 독립이 아닐 수 있는 사건들을 독립으로 가정하므로 한계 존재
 
 ## 1. 논문 : Hierarchical Attention Networks for Document Classification
 https://www.cs.cmu.edu/~hovy/papers/16HLT-hierarchical-attention-networks.pdf
