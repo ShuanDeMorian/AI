@@ -108,6 +108,13 @@ GRU 0.725 0.937 0.971
  
 (1) LSTM보다 CNN의 성능이 더 뛰어난 것으로 보아 문서 분류 문제는 전체 글의 시퀀스를 학습하는 것 보다는 글의 feature를 통해 학습하는 것이 더 올바른 문제 접근법이라고 생각할 수 있다. 따라서, (2) LSTM과 GRU의 성능을 비교했을 때, LSTM에 비해 GRU가 feature를 더 잘 추출했다고 볼 수 있다. 마지막으로, (3) GRU가 CNN보다 성능이 더 좋은 것으로 보아, 문서 분류 문제는 feature와 시퀀스 두 가지를 모두 적절히 고려할 때 성능이 가장 잘 나온다는 것을 확인할 수 있었다. 추후 연구에서는 LSTM과 GRU에서 추출된 feature와 embedding 결과를 비교, 분석하여 어떤 차이가 GRU의 성능을 더 뛰어나게 만들었는지 확인해보고자 한다.
 
+## 4. 논문 : Recent Trends in Deep Learning Based Natural Language Processing
+https://arxiv.org/pdf/1708.02709.pdf
+딥러닝 기반 자연어처리 연구트렌드 정리한 논문
+한국어 번역 : ratsgo's blog : https://ratsgo.github.io/natural%20language%20processing/2017/08/16/deepNLP/
+
+
+
 ## 선형성 모델
 선형 분류 알고리즘은 클래스를 직선(또는 고차원의 아날로그)으로 구분할 수 있다고 가정, linear regression, SVM
 데이터가 직선을 따르는 경향이 있다고 가정함. 이러한 가정은 일부 문제에 대해서는 그다지 나쁘지 않지만 어떤 면에서는 정확도가 떨어질 수 있음(선형으로는 절대 분류를 못 하는 데이터가 있다), 너무 단순하게 표현함
