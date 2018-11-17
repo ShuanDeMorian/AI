@@ -5,7 +5,7 @@
 <p>전통적인 머신러닝에 기반한 모델(SVM/로지스틱 회귀)</p>
 사람이 직접 추출한(hand-crafted) 피처에 강하게 의존, 이러한 피처들은 추출하는 데 시간이 많이 소요되고 많은 경우 불완전함
 
-딥러닝 모델
+<p>딥러닝 모델</p>
 자동화된 피처 추출 및 표현(multi-level automatic feature representation learning) 
 
 1. RNN
