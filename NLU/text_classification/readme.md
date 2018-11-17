@@ -6,7 +6,12 @@
 사람이 직접 추출한(hand-crafted) 피처에 강하게 의존, 이러한 피처들은 추출하는 데 시간이 많이 소요되고 많은 경우 불완전함
 
 ## 딥러닝 모델(CNN,RNN, Recursive NN 등)
-자동화된 피처 추출 및 표현(multi-level automatic feature representation learning) 
+자동화된 피처 추출 및 표현(multi-level automatic feature representation learning)
+
+단어 임베딩 : 분산표상으로 표현된 벡터(Distributional vectors) 또는 단어 임베딩(Word Embedding)은 근본적으로는 distributional hypothesis를 전제로 한다. 이 가정은 비슷한 의미를 지난 단어는 비슷한 문맥에 등장하는 경향이 있을 것이라는 내용이 핵심이다. 따라서 이 벡터들은 이웃한 단어의 특징을 잡아내고자 한다., 분산표상 벡터의 주된 장점은 이 벡터들이 단어 간 유사성을 내포하고 있다는 점이다. 코사인 유사도 같은 지표를 사용함으로써 벡터간 유사성을 측정할 수 있다.
+
+단어 임베딩은 딥러닝 모델의 첫번째 데이터 처리 계층에 자주 사용된다. 일반적으로, 단어 임베딩은 레이블이 없는 방대한 말뭉치에서 '보조적인 목적함수(예컨대 이웃단어로 중심단어를 예측한다. 각 단어벡터는 일반적인 문법적, 의미적 정보를 내포한다)'를 최적화함으로써 사전 학습된다. 단어 임베딩은 문맥 유사도를 잡아내는 데 효율적이라는 사실이 증명되었다. 또한 임베딩 벡터의 차원이 작은 덕분에 계산이 빠르고 효율적이다. 
+이러한 임베딩 벡터를 생성하는 모델은 수년간 얕은(간단한) 뉴럴네트워크였다. 좋은 임베딩을 생성하는데 있어 깊은 구조의 뉴럴네트워크가 필요하지 않았다. 그러나 딥러닝 기반의 NLP모델은 언제나 이러한 임베딩 벡터를 활용해 단어,구,문장을 표현한다. 이는 사실 전통적인 단어 빈도수 기반의 모델과 딥러닝 기반의 모델 간의 가장 큰 차이점이다. 
 
 ## 모델들
 1. RNN
@@ -21,8 +26,13 @@ LSTM은 긴 순차적인 정보를 회로 메커니즘(gating mechanism)을 통�
 
 3. CNN-char, CNN-word (Convolutional Neural Networks)
 CNN은 사람의 시신경망에서 아이디어를 얻어 고안한 모델로, 다양한 패턴 인식 문제에 사용되고 있다. CNN은 컨볼루션 층, subsampling층(또는 max-pooling층)이라는 두 층을 번갈아가며 수행하다가 마지막에 있는 fully-connected층을 이용하여 분류를 수행한다. 컨볼루션 층은 입력에 대해 2차원 필터링을 수행하고, subsampling층은 매핑된 2차원 이미지에서 최댓값을 추출한다. 이러한 계층구조 속에서 역전파(backpropagation)을 이용, 오차를 최소화하는 방향으로 학습해나간다. 주로 비전 분야에서 얼굴 인식, 필기체 인식 등에 많이 사용되어 왔으나 최근에는 자연어 처리분야에서도 널리 활용되고 있다.
+CNN은 텍스트 길이에 따라 성능이 달라진다. 이런 상이함은 Johnson and Zhang(2015)와 같은 많은 연구에 나타난다. 장문의 텍스트에 대한 CNN 모델의 성능은 좋았던 반면 짧은 텍스트에선 반대였다. Wang et al.(2015b)는 짧은 텍스트의 표현(representation)을 모델링하는 데 CNN을 제안했다. 저자들은 단문의 외부적 지식이 사용된 multi-scale semantic units를 도입한 의미론적 클러스터링(semantic clustering)을 제안했다. CNN은 이러한 유닛들을 결합하고 전체적인 표현(represention)을 만들어내는 데 쓰인다.
+기계번역 같은 작업에는 순차적인 정보와 장기 의존성에 대한 인내(perseverance)가 필요하다. 따라서 구조적으로 이러한 작업들은 이러한 피처들을 잃어버리는 CNN 네트워크에 적합하지 않다. 
+CNN은 본질적으로 로컬 연결성(local connectivity), 가중치 공유, 풀링 등의 특징이 있다. 이러한 속성은 많은 task에서 고도로 요구되는 불변성(invariance)을 어느 정도 보장한다. 음성 인식 또한 이러한 불변성을 필요로 한다. 이 때문에 Abdel-Hamid et al. (2014)는 하이브리드 CNN-HMM 모델을 사용했다. 이 변동성은 종종 화자 차이에 기인한 음성 신호에서 종종 발견된다. Abdel-Hamid et al. (2014)는 또한 파라메터를 줄여 계산복잡성을 낮췄다. Palaz et al. (2015)는 CNN 기반의 음성 인식 시스템에 대한 집중적인 분석을 수행했다. 그들은 원시 입력(raw input)과 음성(phone) 사이의 관계를 직접적으로 모델링하는 CNN의 능력을 입증했고, 강건한(robust) 자동 스피치 인식 시스템을 만들어냈다.
+맥스풀링 전략은 문장에서 가치 있는 정보를 종종 잃어버린다. 다중 이벤트 모델링(multiple-event modeling)에서 이러한 정보 손실 문제를 극복하기 위해, Chen et al. (2015b)는 수정된 풀링 전략, 즉 dynamic multi-pooling CNN(DMCNN)을 제안했다.
+전반적으로, CNN은 contextual window 내에 있는 의미적 단서를 추출하는 데 고도로 효율적이다. 그러나 CNN은 매우 많은 데이터를 필요로 한다. CNN 모델은 방대한 양의 데이터를 요구하는 다수의 학습 파라메터를 포함한다. CNN은 데이터가 부족할 때는 문제가 된다. CNN의 다른 이슈는 먼 거리의 문맥 정보를 모델링하기가 불가능하고 그들의 표현(repesentation)에서 시퀀셜한 순서를 보존할 수 없다는 것이다. 문장 모델링의 Kalchbrenner et al. (2014), 기계번역의 Tu et al. (2015)가 약간 다뤄지긴 했지만, 이 문제는 여전히 중요한 이슈로 남아있다. 따라서 Recursive NN과 같은 네트워크가 이런 학습에 적합하다.
     * 장점 : 데이터에서 feature 추출하여 패턴 파악에 용이, layer size 감소로 Parameter 갯수 효과적으로 축소, 노이즈 상쇄, 미세한 부분에서 일관적인 특징을 제공
-    * 단점 :
+    * 단점 : 장거리 의존성(long distance dependencies)를 모델링할 수 없다. 텍스트의 길이에 따라 성능이 달라진다. 방대한 데이터 필요, 다수의 학습 파라메터, 데이터가 적으면 성능이 낮음, 표현(representation)에서 시퀀셜한 순서를 보존할 수 없다. 
 
 4. GRU(Gated Recurrent Unit)
 2014년에 LSTM과 동일한 회로 메커니즘을 사용하지만 파라미터 수를 줄인 GRU가 제안되었다. GRU는 리셋 게이트와 업데이트 게이트로 구성되어 있으며, 두 게이트의 상호작용을 통해 학습한다. LSTM보다 적은 파라미터를 사용하기 때문에 이론적으로는 학습 속도가 조금 더 빠르고 완전한 학습에 필요한 데이터가 LSTM보다 적게 필요하다. 그러나 실제 성능으로는 특정 작업에서는 더 뛰어나기도 하고 뒤쳐지기도 한다.
@@ -59,7 +69,7 @@ SVM은 각 클래스간 거리를 최대로 하는 경계선 또는 경계면(hy
     * 장점 : 간단
     * 단점 : 독립이 아닐 수 있는 사건들을 독립으로 가정하므로 한계 존재
     
-#     
+
 
 ## 1. 논문 : Hierarchical Attention Networks for Document Classification
 https://www.cs.cmu.edu/~hovy/papers/16HLT-hierarchical-attention-networks.pdf
@@ -124,6 +134,13 @@ https://arxiv.org/pdf/1708.02709.pdf
 
 딥러닝 기법은 데이터의 계층적인 표현(hiarchical representation)을 학습하는 다층 레이어(multiple processing layer)를 사용한다. 
 지난 수십년간 NLP 문제를 풀기 위한 머신러닝의 접근은 고차원이면서 sparse한 피처(feature)를 학습한 ‘얕은 모델(shallow models, 예: SVM/로지스틱 회귀)’에 기반한 것이다. 최근 수 년간 dense vector representation에 기반한 뉴럴네트워크가 다양한 NLP task에서 우수한 성능을 보여줬다. 이러한 트렌드는 워드 임베딩(Milokov et al., 2010, 2013a)과 딥러닝 기법(Socher et al., 2013)의 성공에 힘입은 것이다. 딥러닝은 자동화된 피처 추출 및 표현(multi-level automatic feature representation learning)을 가능하게 한다. 그러나 전통적인 머신러닝에 기반한 NLP 시스템은 사람이 직접 추출한(hand-crafted) 피처에 강하게 의존한다. 이러한 피처들은 추출하는 데 시간이 많이 소요되고 많은 경우 불완전하다.  
+
+## 5. 논문 : A Convolutional Neural Network for Modelling Sentences
+http://www.aclweb.org/anthology/P14-1062
+Kim(2014)는 감성, 주관성, 질문유형 분류를 포함한 다양한 문장 분류 문제에 이미 기술한 아키텍처를 실험했다. 이 연구는 간단하지만 효율적인 네트워크여서 아마추어 연구자들에 의해 빠르게 적용되었다. 특정 과업 학습 후 랜덤하게 초기화된 콘볼루션 필터는 목적하는 태스크에 유용한 특정한 n-gram 피처 감지기(detector)가 됐다. 그러나 Kim(2014)의 아키텍쳐는 장거리 의존성(long distance dependencies)을 모델링할 수 없는 등 많은 단점을 지닌다. 이러한 이슈는 Kalchbrenner et al.(2014)에 의해 효과적으로 처리된다. 이들은 문장의 의미를 모델링하기 위한 dynamic convolutional neural network(DCNN)을 제안했다. 이들은 dynamic k max pooling 전략을 제안했다. 이는 시퀀스 p가 주어졌을 때 가장 활동적인(active) k개의 피처를 뽑는 방법이다. 선택은 피처의 순서를 보존하지만, 특정 위치에는 민감하지 않다. DCNN의 서브그래프 dynamic k max pooling을 사용하면 상위 계층의 작은 너비의 필터가 입력문장에서 관계된 구문을 멀리 떨어뜨릴 수 있다. 
+Kalchbrenner et al.(2014)는 문장 모델을 만들기 위해 TDNN의 개념을 기반으로 dynamic k max pooling 전략을 추가했다. 둘의 조합은 작은 폭의 필터가 입력문장의 긴 범위를 커버할 수 있게 한다. 그림8에서 상위의 피처는 집중적이고 짧거나, 전역적이고 입력문장처럼 길 수도 있는 매우 가변적인 범위를 가진다. 이들은 감성 분류, 질의 유형 분류를 포함한 다양한 task에 이 네트워크를 적용했고, 의미있는 결과를 얻었다. 요컨대 이 연구는 문맥적 의미를 모델링하는 데 있어 개별 필터의 범위(range)에 대해 언급했고, 필터의 도달 범위를 확장하는 방법론을 제안했다.
+
+
 
 
 ## 선형성 모델
