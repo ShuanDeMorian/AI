@@ -39,7 +39,7 @@ LSTM(Hochreiter and Schmidhuber, 1997; Gers et al., 1999, 그림 10)은 간단�
 vanilla RNN과 달리 LSTM을 사용하면 오차가 무제한적인 time step에 역전파될 수 있다. 3개의 gate, 즉 input/forget/output gate로 구성되며 히든 스테이트는 아래 식에 따라 계산된다.
 
     * 장점 : cell gate를 통한 RNN의 장기 의존성 문제 해결(Weight를 계속 기억할지 결정하여 Gradient Vanishing 문제를 해결), 과거의 data를 계속해서 update 하므로, RNN보다 지속적, Cell State는 정보를 추가하거나 삭제하는 기능을 담당, 각각의 메모리 컨트롤 가능, 결과값 컨트롤 가능 
-    * 단점 : 메모리가 덮어씌워질 가능성(더 자세히?), 연산속도가 느리다
+    * 단점 : 메모리가 덮어씌워질 가능성(더 자세히?), 연산속도가 느리다(파라미터 수를 생각해도), 파라미터 수가 많다.
 
 3. CNN-char, CNN-word (Convolutional Neural Networks)
 CNN은 사람의 시신경망에서 아이디어를 얻어 고안한 모델로, 다양한 패턴 인식 문제에 사용되고 있다. CNN은 컨볼루션 층, subsampling층(또는 max-pooling층)이라는 두 층을 번갈아가며 수행하다가 마지막에 있는 fully-connected층을 이용하여 분류를 수행한다. 컨볼루션 층은 입력에 대해 2차원 필터링을 수행하고, subsampling층은 매핑된 2차원 이미지에서 최댓값을 추출한다. 이러한 계층구조 속에서 역전파(backpropagation)을 이용, 오차를 최소화하는 방향으로 학습해나간다. 주로 비전 분야에서 얼굴 인식, 필기체 인식 등에 많이 사용되어 왔으나 최근에는 자연어 처리분야에서도 널리 활용되고 있다.
@@ -55,11 +55,13 @@ CNN은 본질적으로 로컬 연결성(local connectivity), 가중치 공유, �
 2014년에 LSTM과 동일한 회로 메커니즘을 사용하지만 파라미터 수를 줄인 GRU가 제안되었다. GRU는 리셋 게이트와 업데이트 게이트로 구성되어 있으며, 두 게이트의 상호작용을 통해 학습한다. LSTM보다 적은 파라미터를 사용하기 때문에 이론적으로는 학습 속도가 조금 더 빠르고 완전한 학습에 필요한 데이터가 LSTM보다 적게 필요하다. 그러나 실제 성능으로는 특정 작업에서는 더 뛰어나기도 하고 뒤쳐지기도 한다.
 GRU(Cho et al., 2014)라 불리는 RNN의 변형은 대부분의 task에서 LSTM과 경험적으로 유사한 성능을 내면서 구조적으로는 더 간단하다(본 블로그). GRU는 reset gate와 update gate의 두 개 gate로 구성되며 LSTM처럼 메모리를 보호한다. GRU는 LSTM보다 효율적인 RNN이 될 수 있다. GRU의 작동은 다음과 같다.
 
-
     * 장점 : LSTM 개선하여 더 단순화됨(Update gate(과거의 상태를 반영하는 Gate)와 Reset gate(현시점 정보와 과거시점 정보의 반영 여부를 결정)를 추가하여 과거의 정보를 어떻게 반영할 것인지 결정), 연산속도가 빠르며 메모리가 LSTM처럼 덮여 씌여질 가능성이 없음, LSTM보다 학습속도가 조금 더 빠르고 완전한 학습에 필요한 데이터가 적게 필요하다.
     * 단점 : 메모리와 결과값의 컨트롤이 불가능
 
 5. LEAM(Label Embedding Attentive Model)
+
+    * 장점 : 적은 파라미터 수, 빠른 학습시간
+    * 단점 : 
 
 6. PTE(Predictive Text Embeddings , Tang et al 2015)
 
