@@ -59,8 +59,9 @@ GRU(Cho et al., 2014)라 불리는 RNN의 변형은 대부분의 task에서 LSTM
     * 단점 : 메모리와 결과값의 컨트롤이 불가능
 
 5. LEAM(Label Embedding Attentive Model)
+Label Embedding Attentive Model로서 label을 word와 똑같은 space에서 embedding한다. Text sequences와 labels의 compatibilit를 측정하는데 attention framework를 사용한다.  
 
-    * 장점 : 적은 파라미터 수, 빠른 학습시간
+    * 장점 : Interpretable, 적은 파라미터 수, 빠른 학습시간
     * 단점 : 
 
 6. PTE(Predictive Text Embeddings , Tang et al 2015)
@@ -84,6 +85,10 @@ attention mechanism-기존의 인코더-디코더 프레임워크가 직면한 �
 반면에, 텍스트 요약과 기계 번역 같은 작업에서 입력 텍스트와 출력 텍스트 사이에 일정한 정렬(alignment)이 존재한다. 요약이나 번역에서 각 토큰 생성 단계는 입력 텍스트의 특정 부분과 매우 관련이 있다.
 어텐션 매커니즘은 디코더가 입력 시퀀스를 다시 참조할 수 있게 하여 위의 문제를 완화하려고 시도한다. 디코더는 마지막 히든 스테이트와 생성된 토큰에 더하여 ‘context’ 벡터에 대해 조건부화된다.
 Bahdanau et al. (2014)는 기계 번역에 어텐션 매커니즘을 처음으로 적용했다. 어텐션 매커니즘은 특히 긴 시퀀스에 대해 모델의 성능을 향상시킨다. 그들의 연구에서, 입력된 히든 스테이트 시퀀스에 대한 어텐션 시그널은 디코더의 마지막 계층에 의해 다층 퍼셉트론으로 결정된다. 어텐션 시그널을 시각화하면 소스와 타겟 랭귀지 간의 명확한 정렬(alignment)를 보여줄 수 있다(그림14).
+
+Hierachical Attention Network는 계층적 Attention Mechanism을 사용한다. 이는 문서의 계층적 구조를 반영한다. 이 Network에선 sentence와 word level의 두 attention mechanism을 사용한다.
+
+    * 장점 : 문서의 계층적 구조 반영
 
 11. BoW TFIDF, BoW 방법을 이용한 Naive Bayesian Classifier
     * 장점 : 
