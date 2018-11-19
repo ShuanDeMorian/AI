@@ -95,7 +95,7 @@ Bahdanau et al. (2014)는 기계 번역에 어텐션 매커니즘을 처음으�
     * 장점 : 단어의 의미적 문맥적 정보를 파악, 모든 문서 속 단어들의 의미적, 문맥적인 정보를 완벽하게 파악하지 않아도 적절한 성능이 나옴
     * 단점 : 단순히 여러 단어를 보는 것만으로는 텍스트의 모든 의미 파악하는데 한계 존재, N 값이 커질수록 계산량이 급격히 늘어나는 단점
 
-14. Naive Bayesian Classifier
+14. Naive Bayes Classifier
 각 사건들이 서로 독립이라는 가정을 한 후, Bayes's theorem을 이용하여 확률을 계산, 분류하는 모델이다. 따라서 두 확률의 결합 확률(Joint Probability)을 두 확률의 곱으로 표현해버리지만, 상당히 강력한 성능을 보이고 있어서 널리 사용된다. Naive Bayesian Classifier는 feature들간의 조건부독립 성질을 이용하는 반면, Multinomial Naive Bayesian Classifier는 feature들이 다항 분표(multinomial distribution)를 따른다는 정보를 활용한다.
     * 장점 : 간단
     * 단점 : 독립이 아닐 수 있는 사건들을 독립으로 가정하므로 한계 존재
