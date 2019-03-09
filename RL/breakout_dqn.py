@@ -24,12 +24,13 @@ class DQNAgent:
         self.action_size = action_size
         # DQN 하이퍼파라미터
         self.epsilon = 1.
-        self.epsilon_start, self.epsilon_end = 1.0, 0.1
+        self.epsilon_start, self.epsilon_end = 1., 0.1
         self.exploration_steps = 1000000.
         self.epsilon_decay_step = (self.epsilon_start - self.epsilon_end) \
                                   / self.exploration_steps
         self.batch_size = 32
-        self.train_start = 50000
+        #self.train_start = 50000
+        self.train_start = 1000
         self.update_target_rate = 10000
         self.discount_factor = 0.99
         # 리플레이 메모리, 최대 크기 400000
@@ -200,12 +201,7 @@ if __name__ == "__main__":
             # 바로 전 4개의 상태로 행동을 선택
             action = agent.get_action(history)
             # 1: 정지, 2: 왼쪽, 3: 오른쪽
-            if action == 0:
-                real_action = 1
-            elif action == 1:
-                real_action = 2
-            else:
-                real_action = 3
+            real_action = action + 1
 
             # 선택한 행동으로 환경에서 한 타임스텝 진행
             observe, reward, done, info = env.step(real_action)
@@ -260,5 +256,5 @@ if __name__ == "__main__":
                 agent.avg_q_max, agent.avg_loss = 0, 0
 
         # 1000 에피소드마다 모델 저장
-        if e % 1000 == 0:
+        if e % 20 == 0:
             agent.model.save_weights("./save_model/breakout_dqn.h5")
