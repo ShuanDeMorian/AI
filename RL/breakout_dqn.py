@@ -16,46 +16,49 @@ EPISODES = 50000
 
 # 브레이크아웃에서의 DQN 에이전트
 class DQNAgent:
-    def __init__(self, action_size):
+    def __init__(self, action_size, train=True):
+        self.train = train
         self.render = True
-        self.load_model = True
+        self.load = True
         # 상태와 행동의 크기 정의
         self.state_size = (84, 84, 4)
         self.action_size = action_size
-        # DQN 하이퍼파라미터
-        self.epsilon = 1.
-        self.epsilon_start, self.epsilon_end = 1., 0.1
-        self.exploration_steps = 1000000.
-        self.epsilon_decay_step = (self.epsilon_start - self.epsilon_end) \
-                                  / self.exploration_steps
-        self.batch_size = 32
-        #self.train_start = 50000
-        self.train_start = 1000
-        self.update_target_rate = 10000
-        self.discount_factor = 0.99
-        # 리플레이 메모리, 최대 크기 400000
-        self.memory = deque(maxlen=400000)
         self.no_op_steps = 30
-        # 모델과 타겟모델을 생성하고 타겟모델 초기화
+        self.avg_q_max, self.avg_loss = 0, 0
+
+        # 모델 생성
         self.model = self.build_model()
-        self.target_model = self.build_model()
-        self.update_target_model()
-
-        self.optimizer = self.optimizer()
-
         # 텐서보드 설정
         self.sess = tf.InteractiveSession()
-        K.set_session(self.sess)
 
-        self.avg_q_max, self.avg_loss = 0, 0
-        self.summary_placeholders, self.update_ops, self.summary_op = \
-            self.setup_summary()
-        self.summary_writer = tf.summary.FileWriter(
-            'summary/breakout_dqn', self.sess.graph)
+        if self.train:
+            # DQN 하이퍼파라미터
+            self.epsilon = 1.
+            self.epsilon_start, self.epsilon_end = 1., 0.1
+            self.exploration_steps = 1000000.
+            self.epsilon_decay_step = (self.epsilon_start - self.epsilon_end) / self.exploration_steps
+            self.batch_size = 32
+            self.train_start = 50000
+            self.update_target_rate = 10000
+            self.discount_factor = 0.99
+            # 리플레이 메모리, 최대 크기 400000
+            self.memory = deque(maxlen=400000)
+
+            # 타겟모델 생성하고 초기화
+            self.target_model = self.build_model()
+            self.update_target_model()
+
+            self.optimizer = self.optimizer()
+
+            
+            self.summary_placeholders, self.update_ops, self.summary_op = self.setup_summary()
+            self.summary_writer = tf.summary.FileWriter('summary/breakout_dqn', self.sess.graph)
+        
+        K.set_session(self.sess)
         self.sess.run(tf.global_variables_initializer())
 
-        if self.load_model:
-            self.model.load_weights("./save_model/breakout_dqn.h5")
+        if self.load and self.train:
+            self.load_model("./save_model/breakout_dqn.h5")
 
     # Huber Loss를 이용하기 위해 최적화 함수를 직접 정의
     def optimizer(self):
@@ -97,6 +100,12 @@ class DQNAgent:
 
     # 입실론 탐욕 정책으로 행동 선택
     def get_action(self, history):
+        if self.train == False:
+            if np.random.random() < 0.01:
+                return random.randrange(3)
+            q_value = self.model.predict(history)
+            return np.argmax(q_value[0])
+
         history = np.float32(history / 255.0)
         if np.random.rand() <= self.epsilon:
             return random.randrange(self.action_size)
@@ -140,6 +149,9 @@ class DQNAgent:
 
         loss = self.optimizer([history, action, target])
         self.avg_loss += loss[0]
+
+    def load_model(self, filename):
+        self.model.load_weights(filename)
 
     # 각 에피소드 당 학습 정보를 기록
     def setup_summary(self):

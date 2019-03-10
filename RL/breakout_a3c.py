@@ -367,6 +367,8 @@ class Agent(threading.Thread):
 
 
 # 학습속도를 높이기 위해 흑백화면으로 전처리
+#Takes maximum value for each pixel value over the current and previous
+# frame. Used to get round Atari sprites flickering (Mnih et al. (2015))
 def pre_processing(next_observe, observe):
     processed_observe = np.maximum(next_observe, observe)
     processed_observe = np.uint8(
@@ -375,6 +377,5 @@ def pre_processing(next_observe, observe):
 
 if __name__ == "__main__":
     global_agent = A3CAgent(action_size=3)
-    # 모델이 저장되어 있는 경우만 오류 안 남
     global_agent.load_model("./save_model/breakout_a3c")
     global_agent.train()
