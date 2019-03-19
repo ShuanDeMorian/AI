@@ -69,10 +69,10 @@ softmax를 통과한 값을 value에 곱해준다면, query와 유사한 value�
 </p>
 위의 그림을 수식으로 나타내면 다음과 같다.
 <p align='center'>
-<img src="./image/multihead_equation.gif">
+<img width="70%" src="./image/multihead_equation.gif">
 </p>
 <p align='center'>
-where <img src="./image/head_i.gif">
+where <img width="70%" src="./image/head_i.gif">
 </p>
 <p align='center'>
 <img src="./image/multi_head.png">
@@ -88,7 +88,7 @@ where <img src="./image/head_i.gif">
 이렇게 project된 key, value, query들은 병렬적으로 attention function을 거쳐 <i>d<sub>v</sub></i> dimension output값으로 나오게 된다.   
 그 다음 여러 개의 head를 concatenate하고 다시 projection을 수행한다. 그리하여 최종적인 <i>d<sub>model</sub></i> dimension output값이 나오게 된다. 각각의 과정에서 dimension을 표현하면 다음과 같다.
 <p align='center'><img src="./image/calculate_dimension.png"></p>
-<p align='center'><i>d<sub>Q</sub></i>, <i>d<sub>K</sub></i>, <i>d<sub>V</sub></i></p>는 각각 query, key, value</p> 
+<p align='center'><i>d<sub>Q</sub></i>, <i>d<sub>K</sub></i>, <i>d<sub>V</sub></i>는 각각 query, key, value</p> 
 
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
