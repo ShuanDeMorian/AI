@@ -79,10 +79,10 @@ where <img width="40%" src="./image/head_i.gif">
 </p>
 
 <i>d<sub>model</sub></i> dimension의 key, value, query들로 하나의 attention을 수행하는 대신 key, value, query들에 각각 다른 학습된 linear projection을 h번 수행하는 게 더 좋다고 한다. 즉, 동일한 Q,K,V에 각각 다른 weight matrix <i>W</i>를 곱해주는 것이다. 이 때 parameter matrix는 다음과 같다.
-<p align='center'><img width="40%" src="./image/W_i^Q.gif"></p>
-<p align='center'><img width="40%" src="./image/W_i^K.gif"></p>
-<p align='center'><img width="40%" src="./image/W_i^V.gif"></p>
-<p align='center'><img width="40%" src="./image/W_i^O.gif"></p>
+<p align='center'><img width="15%" src="./image/W_i^Q.gif"></p>
+<p align='center'><img width="15%" src="./image/W_i^K.gif"></p>
+<p align='center'><img width="15%" src="./image/W_i^V.gif"></p>
+<p align='center'><img width="15%" src="./image/W_i^O.gif"></p>
 순서대로 query, key, value, output에 대한 parameter matrix이다. projection이라고 하는 이유는 각각의 값들이 parameter matrix와 곱해졌을 때 <i>d<sub>k</sub></i>, <i>d<sub>v</sub></i>, <i>d<sub>model</sub></i> 차원으로 project되기 때문입니다.   
 논문에서는 <i>d<sub>k</sub></i> = <i>d<sub>v</sub></i> = <i>d<sub>model</sub></i>/h를 사용했는데 꼭 <i>d<sub>k</sub></i>와 <i>d<sub>v</sub></i>가 같을 필요는 없습니다.   
 이렇게 project된 key, value, query들은 병렬적으로 attention function을 거쳐 <i>d<sub>v</sub></i> dimension output값으로 나오게 된다.   
