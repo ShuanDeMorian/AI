@@ -56,16 +56,7 @@ embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변
 <img src="./image/scaled_dot-product_attention.jpg">
 </center>
 먼저 input은 <i>d<sub>k</sub></i> dimension의 query와 key들, <i>d<sub>v</sub></i> dimension의 value들로 이루어져 있다.   
-이 때 모든 query와 key에 대한 dot-product를 계산하고 각각을 
-<math xmlns="http://www.w3.org/1998/Math/MathML">
-  <msqrt>
-    <msub>
-      <mi>d</mi>
-      <mi>k</mi>
-    </msub>
-  </msqrt>
-</math>
-로 나누어준다. dot-product를 하고 
+이 때 모든 query와 key에 대한 dot-product를 계산하고 각각을 !(./image/sqrt_dk.gif)로 나누어준다. dot-product를 하고 
 <math xmlns="http://www.w3.org/1998/Math/MathML">
   <msqrt>
     <msub>
@@ -75,6 +66,8 @@ embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변
   </msqrt>
 </math>
 으로 scaling을 해주기 때문에 Scaled Dot-Product Attention인 것이다. 그리고 여기에 softmax를 적용해 value들에 대한 weights를 얻어낸다.
+
+\sqrt{\frac{a}{b}}
 
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
