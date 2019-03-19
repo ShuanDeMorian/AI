@@ -79,12 +79,11 @@ where <img src="./image/head_i.gif">
 </p>
 
 <i>d<sub>model</sub></i> dimension의 key, value, query들로 하나의 attention을 수행하는 대신 key, value, query들에 각각 다른 학습된 linear projection을 h번 수행하는 게 더 좋다고 한다. 즉, 동일한 Q,K,V에 각각 다른 weight matrix <i>W</i>를 곱해주는 것이다. 이 때 parameter matrix는 다음과 같다.
-<p align='center'>
-<img src="./image/W_i^Q.gif">
-<img src="./image/W_i^K.gif">
-<img src="./image/W_i^V.gif">
-<img src="./image/W_i^O.gif">
-</p>
+<p align='center'><img src="./image/W_i^Q.gif"></p>
+<p align='center'><img src="./image/W_i^K.gif"></p>
+<p align='center'><img src="./image/W_i^V.gif"></p>
+<p align='center'><img src="./image/W_i^O.gif"></p>
+
 
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
