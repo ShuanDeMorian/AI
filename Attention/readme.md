@@ -15,7 +15,12 @@ Attention이란 위의 그림과 같이 사람이 그림을 볼 때 특정 부�
    
 Attention은 번역에도 활용할 수 있다. 위의 그림은 번역을 할 때 attention을 visualization한건데 어떤 단어에 집중 또는 단어 간의 관계로 볼 수도 있다. 선이 진할수록 관계도가 높은 것이다.   
    
-Attention은 Q,K,V를 알아야 하는데 
+* Query   
+질문과 같다.   
+위의 번역에서 Query는 '어떤 단어'를 번역하면?과 같다.
+* Key
+* Value
+
 
 # Self-Attention
 
