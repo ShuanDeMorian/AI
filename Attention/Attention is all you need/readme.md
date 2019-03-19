@@ -48,7 +48,7 @@ RNN 모델은 input과 output sequence의 position들을 계산하는데 뛰어�
 </p>
 
 # Embeddings and Softmax
-embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변경되는 learned embedding을 사용했다. 이 때 input과 output은 같은 embedding layer를 사용한다. 또한 decoder outputㅇ르 다음 token의 확률로 바꾸기 위해 learned linear transformation과 softmax function을 사용했다. learned linear transformation을 사용했다는 것은 decoder output에 weight matrix W를 곱해주는데, 이 때 W가 학습된다는 의미다.
+embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변경되는 learned embedding을 사용했다. 이 때 input과 output은 같은 embedding layer를 사용한다. 또한 decoder output을 다음 token의 확률로 바꾸기 위해 learned linear transformation과 softmax function을 사용했다. learned linear transformation을 사용했다는 것은 decoder output에 weight matrix W를 곱해주는데, 이 때 W가 학습된다는 의미다.
 
 # Scaled Dot-Product Attention
 해당 논문의 attention을 <strong>Scaled Dot-Product Attention</strong>이라고 부른다. 수식을 살펴보면 이렇게 부르는 이유를 알 수 있다.
@@ -56,18 +56,9 @@ embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변
 <img src="./image/scaled_dot-product_attention.jpg">
 </center>
 먼저 input은 <i>d<sub>k</sub></i> dimension의 query와 key들, <i>d<sub>v</sub></i> dimension의 value들로 이루어져 있다.   
-이 때 모든 query와 key에 대한 dot-product를 계산하고 각각을 !(./image/sqrt_dk.gif)로 나누어준다. dot-product를 하고 
-<math xmlns="http://www.w3.org/1998/Math/MathML">
-  <msqrt>
-    <msub>
-      <mi>d</mi>
-      <mi>k</mi>
-    </msub>
-  </msqrt>
-</math>
-으로 scaling을 해주기 때문에 Scaled Dot-Product Attention인 것이다. 그리고 여기에 softmax를 적용해 value들에 대한 weights를 얻어낸다.
-
-\sqrt{\frac{a}{b}}
+<p>이 때 모든 query와 key에 대한 dot-product를 계산하고 각각을 <img src="./image/sqrt_dk.gif">로 나누어준다.</p>
+<p>dot-product를 하고 <img src="./image/sqrt_dk.gif">으로 scaling을 해주기 때문에 Scaled Dot-Product Attention인 것이다.</p>
+그리고 여기에 softmax를 적용해 value들에 대한 weights를 얻어낸다.
 
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
