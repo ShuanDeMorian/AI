@@ -1,11 +1,15 @@
 # Attention
-![attention example](./image/attention_example.jpg)      
-<center><strong>그림을 보고 Captioning 하는 예시</strong></center>   
+<p align='center'>
+<img src="./image/attention_example.jpg">           
+<strong>그림을 보고 Captioning 하는 예시</strong>
+</p> 
    
 Attention이란 위의 그림과 같이 사람이 그림을 볼 때 특정 부분에 Attention을 하여 어떤 그림인지를 아는 것처럼 컴퓨터로 이를 구현해보고자 하는 것이다. 
 
-![attention nlp example](./image/attention_nlp_example.jpg)   
-<Attention을 활용한 번역 visualization>   
+<p align='center'>
+<img src="./image/attention_nlp_example.jpg">
+<strong>Attention을 활용한 번역 visualization</strong>
+</p>   
    
 Attention은 번역에도 활용할 수 있다. 위의 그림은 번역을 할 때 attention을 visualization한건데 어떤 단어에 집중 또는 단어 간의 관계로 볼 수도 있다. 선이 진할수록 관계도가 높은 것이다.   
    
