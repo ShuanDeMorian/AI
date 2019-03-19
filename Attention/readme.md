@@ -1,5 +1,4 @@
 # Attention
-<<<<<<< HEAD
 ![Attention example](./image/attention example.jpg)   
 <그림을 보고 Captioning 하는 예시>   
    
@@ -12,19 +11,9 @@ Attention은 번역에도 활용할 수 있다. 위의 그림은 번역을 할 �
    
 Attention은 Q,K,V를 알아야 하는데 
 
-
-# Self Attention
-
-
-
-=======
->>>>>>> 505b87fe0372cc5a54532f1a1d758fb3411edf3f
-
-
 # Self-Attention
 
 "Attention is all you need' 논문에서 나온 개념으로 기존의 Attention과는 달리 Query가 input이다. 즉 자기 자신을 제일 잘 표현할 수 있는 input(key, value) pair를 찾고 그 결과가 가장 좋은 embedding이 된다. 
-
 
 # Attention Model의 장점
 * <strong><font color="red">해석 가능하다(interpretable)!!!!!!</font></strong>(model이 어디에 attention을 줘서 그러한 결론을 내렸는지 알 수 있다)
