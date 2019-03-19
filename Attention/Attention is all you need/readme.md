@@ -17,8 +17,7 @@ Transformer는 훨씬 작은 상수의 스텝만을 가지며(O(1)이라는 뜻)
 인코더에서부터 self attention 메커니즘이 활용되며, "I arrived at the bank after crossing the river"이라는 위 문장에서 "bank"라는 단어의 representation을 결정할 때, "river"는 높은 가중치를 부여받아 가중 평균될 수 있다는 것이다.   
 아래 그림을 보면 윗 문장과 아래 문장에서 it이 가리키는 단어가 서로 다르지만, self attention 메커니즘을 통해서 각각 'animal'과 'street'에 더 적절히 가중치를 주고 있다는 것을 알 수 있다.(진한 푸른색으로 표기됨)
 <center>
-<img src="./image/self_attention_animal.png">
-<img src="./image/self_attention_street.png">
+<img src="./image/self_attention_example.png">
 </center>
    
 paralleization은 data를 parallel하게 처리할 수 있도록 computer program이나 system을 설계하는 것을 말한다. (보통 computer program은 data를 serially 처리한다)
