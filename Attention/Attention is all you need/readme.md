@@ -100,6 +100,21 @@ key, value,s query들은 모두 encoder의 이전 layer의 output에서 온다. 
 encoder와 비슷하게 decoder에서도 self-attention을 줄 수 있다. 하지만 <i>i</i>번째 output을 다시 <i>i+1</i>번째 input으로 사용하는 auto-regressive한 특성을 유지하기 위해, masking out된 scaled dot-product attention을 적용했다.
 <p>masking out이 됐다는 것은 i번째 position에 대한 attention을 얻을 때, i번째 이후에 있는 모든 position은 <img src="./image/attention_equation_small.gif">에서 softmax의 input 값을 -<img src="./image/infinity.gif">로 설정한 것이다. 이렇게 한다면 i번째 이후에 있는 position에 attention을 주는 경우가 없을 것이다.</p>
 
+## Encoder-Decoder Attention Layer
+<p align='center'><img src="./image/encoder-decoder_attention.png"></p>
+query들은 이전 decoder layer에서 오고 key와 value들은 encoder의 output에서 온다. 그래서 decoder의 모든 position에서 input sequence 즉, encoder output의 모든 position에 attention을 줄 수 있게 된다.   
+query가 decoder layer의 output인 이유는 <i>query</i>라는 것이 조건에 해당하기 때문이다. 좀 더 풀어서 설명하면, '지금 decoder에서 이런 값이 나왔는데 무엇이 output이 돼야 할까?'가 query인 것이다.   
+이 때 query는 이미 이전 layer에서 masking out됐으므로, i번째 position까지만 attention을 얻게 된다. 이 같은 과정은 sequence-to-sequence의 전형적인 encoder-decoder mechanisms를 따라한 것이다.   
+모든 position에서 attention을 줄 수 있다는 게 이해가 안되면 ![링크](http://mlexplained.com/2017/12/29/attention-is-all-you-need-explained/)를 참고바람
+
+# Position-wise Feed-Forward Networks
+encoder와 decoder의 각각의 layer는 아래와 같은 fully connected feed-forward network를 포함하고 있다.
+<p align='center'><img src="./image/Sample-of-a-feed-forward-neural-network.png"></p>
+position마다, 즉 개별 단어마다 적용되기 때문에 position-wise이다. network는 두 번의 linear transformation과 activation function ReLU로 이루어져 있다. 
+<p align='center'><img src="./image/FFN_equation.gif"></p>
+<p align='center'><img src="./image/ffn.png"></p>
+<p>x에 linear transformation을 적용한 뒤, <img src="./image/ReLU.gif">를 거쳐 다시 한 번 linear transformation을 적용한다. <i>W,b</i>의 아래 첨자가 다른 것에서 볼 수 있듯이 같은 형태지만 layer가 달라지면 다른 parameter를 사용한다. kernel size가 1이고 channel이 layer인 convolution을 두 번 수행한 것으로도 위 과정을 이해할 수 있다.
+
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
 2. Github - Attention Is All You Need 논문 리뷰 :  https://github.com/YBIGTA/DeepNLP-Study/wiki/Attention-Is-All-You-Need-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0
