@@ -1,6 +1,6 @@
 # Attention
 ![attention example](./image/attention_example.jpg)      
-<그림을 보고 Captioning 하는 예시>   
+<center><strong>그림을 보고 Captioning 하는 예시</strong></center>   
    
 Attention이란 위의 그림과 같이 사람이 그림을 볼 때 특정 부분에 Attention을 하여 어떤 그림인지를 아는 것처럼 컴퓨터로 이를 구현해보고자 하는 것이다. 
 
