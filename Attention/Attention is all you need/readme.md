@@ -56,7 +56,34 @@ embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변
 <img src="./image/scaled_dot-product_attention.jpg">
 </p>
 <p>
-먼저 input은 <i>d<sub>k</sub></i> dimension의 query와 key들, <i>d<sub>v</sub></i> dimension의 value들로 이루어져 있다. 이 때 모든 query와 key에 대한 dot-product를 계산하고 각각을 <img src="./image/sqrt_dk.gif">로 나누어준다. dot-product를 하고 <img src="./image/sqrt_dk.gif">으로 scaling을 해주기 때문에 Scaled Dot-Product Attention인 것이다. 그리고 여기에 softmax를 적용해 value들에 대한 weights를 얻어낸다.
+먼저 input은 <i>d<sub>k</sub></i> dimension의 query와 key들, <i>d<sub>v</sub></i> dimension의 value들로 이루어져 있다. 이 때 모든 query와 key에 대한 dot-product를 계산하고 각각을 <img src="./image/sqrt_dk.gif">로 나누어준다. dot-product를 하고 <img src="./image/sqrt_dk.gif">으로 scaling을 해주기 때문에 Scaled Dot-Product Attention인 것이다. 그리고 여기에 softmax를 적용해 value들에 대한 weights를 얻어낸다. 
+</p>
+<p>
+key와 value는 attention이 이루어지는 위치에 상관없이 같은 값을 갖게 된다. 이 때 query와 key에 대한 dot-product를 계산하면 각각의 query와 key 사이의 유사도를 구할 수 있게 된다. 흔히 들어본 cosine similarity는 dot-product에서 vector의 magnitude로 나눈 것이다. <img src="./image/sqrt_dk.gif">로 scaling을 해주는 이유는 dot-products의 값이 커질수록 softmax 함수에서 기울기의 변화가 거의 없는 부분으로 가기 때문이다.
+</p>
+softmax를 통과한 값을 value에 곱해준다면, query와 유사한 value일수록, 즉 중요한 value일수록 더 높은 값을 가지게 된다. 중요한 정보에 더 관심을 둔다는 attention의 원리에 알맞은 것이다.
+
+# Multi-Head Attention
+<p align='center'>
+<img src="./image/multi-head_attention.png">
+</p>
+위의 그림을 수식으로 나타내면 다음과 같다.
+<p align='center'>
+<img src="./image/multihead_equation.gif">
+</p>
+<p align='center'>
+where <img src="./image/head_i.gif">
+</p>
+<p align='center'>
+<img src="./image/multi_head.png">
+</p>
+
+<i>d<sub>model</sub></i> dimension의 key, value, query들로 하나의 attention을 수행하는 대신 key, value, query들에 각각 다른 학습된 linear projection을 h번 수행하는 게 더 좋다고 한다. 즉, 동일한 Q,K,V에 각각 다른 weight matrix <i>W</i>를 곱해주는 것이다. 이 때 parameter matrix는 다음과 같다.
+<p align='center'>
+<img src="./image/W_i^Q.git">
+<img src="./image/W_i^K.git">
+<img src="./image/W_i^V.git">
+<img src="./image/W_i^O.git">
 </p>
 
 # 참고자료
