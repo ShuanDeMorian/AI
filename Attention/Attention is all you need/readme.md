@@ -83,7 +83,12 @@ where <img src="./image/head_i.gif">
 <p align='center'><img src="./image/W_i^K.gif"></p>
 <p align='center'><img src="./image/W_i^V.gif"></p>
 <p align='center'><img src="./image/W_i^O.gif"></p>
-
+순서대로 query, key, value, output에 대한 parameter matrix이다. projection이라고 하는 이유는 각각의 값들이 parameter matrix와 곱해졌을 때 <i>d<sub>k</sub></i>, <i>d<sub>v</sub></i>, <i>d<sub>model</sub></i> 차원으로 project되기 때문입니다.   
+논문에서는 <i>d<sub>k</sub></i> = <i>d<sub>v</sub></i> = <i>d<sub>model</sub></i>/h를 사용했는데 꼭 <i>d<sub>k</sub></i>와 <i>d<sub>v</sub></i>가 같을 필요는 없습니다.   
+이렇게 project된 key, value, query들은 병렬적으로 attention function을 거쳐 <i>d<sub>v</sub></i> dimension output값으로 나오게 된다.   
+그 다음 여러 개의 head를 concatenate하고 다시 projection을 수행한다. 그리하여 최종적인 <i>d<sub>model</sub></i> dimension output값이 나오게 된다. 각각의 과정에서 dimension을 표현하면 다음과 같다.
+<p align='center'><img src="./image/calculate_dimension.png"></p>
+<p align='center'><i>d<sub>Q</sub></i>, <i>d<sub>K</sub></i>, <i>d<sub>V</sub></i></p>는 각각 query, key, value 
 
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
