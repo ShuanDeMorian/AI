@@ -30,9 +30,6 @@ paralleization은 data를 parallel하게 처리할 수 있도록 computer progra
 
 RNN 모델은 input과 output sequence의 position들을 계산하는데 뛰어나다. 이 position대로 순서대로 연산을 하면서, 이전 hidden state <strong><i>h<sub>t-1</sub></i></strong>와 그 position의 input <strong><i>t</i></strong>를 통해 새로운 hidden state <strong><i>h<sub>t</sub></i></strong>를 만들어 낸다. 따라서 구조상 sequential한 특성을 가지고 있기에, 이는 parallelization에 취약하다는 단점이 있다. 이는 sequence길이가 길어진 경우 batch로써 풀고자 할 때 큰 문제가 된다.
 
-
-
-
 # Attention Model의 장점
 * <strong><font color="red">해석 가능하다(interpretable)!!!!!!</font></strong>(model이 어디에 attention을 줘서 그러한 결론을 내렸는지 알 수 있다)
 * 각각 layer마다 필요로 하는 총 computing cost가 줄어든다.
@@ -45,6 +42,8 @@ RNN 모델은 input과 output sequence의 position들을 계산하는데 뛰어�
 # Transformer Model Architecture
 ![Transformer_Model_Architecture](./image/Transformer_model_architecture.png)
 
+# Embeddings and Softmax
+embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변경되는 learned embedding을 사용했다. 이 때 input과 output은 같은 embedding layer를 사용한다. 또한 decoder outputㅇ르 다음 token의 확률로 바꾸기 위해 learned linear transformation과 softmax function을 사용했다. learned linear transformation을 사용했다는 것은 decoder output에 weight matrix W를 곱해주는데, 이 때 W가 학습된다는 의미다.
 
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
