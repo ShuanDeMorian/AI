@@ -8,6 +8,8 @@ Attention이란 위의 그림과 같이 사람이 그림을 볼 때 특정 부�
 
 <p align='center'>
 <img src="./image/attention_nlp_example.jpg">
+</p>
+<p align='center'>
 <strong>Attention을 활용한 번역 visualization</strong>
 </p>   
    
