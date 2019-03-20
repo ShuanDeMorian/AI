@@ -119,7 +119,7 @@ position마다, 즉 개별 단어마다 적용되기 때문에 position-wise이�
 Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단어의 position 정보를 저장해줄 필요가 있다. 그래서 encoder와 decoder의 input embedding에 positional encoding을 더해주었다. positional encoding은 <i>d<sub>model</sub></i>(embedding 차원)과 같은 차원을 갖기 때문에 positional encoding vector와 embedding vector는 더해질 수 있다.   
 논문에서는 다른 frequency를 가지는 sine과 cosine 함수를 이용했다. 
 * 주어진 구간내에서 완료되는 cycle의 개수
-<p aligne='center'><img src="./image/positional_encoding_equation.PNG"></p>
+<p align='center'><img src="./image/positional_encoding_equation.PNG"></p>
 <p>
    <i>pos</i>는 position, <i>i</i>는 dimension이고 주기가 <img src="./image/cycle.PNG">인 삼각 함수이다. 즉, <i>pos</i>는 sequence에서 단어의 위치이고 해당 단어는 <i>i</i>에 0부터 <img src="./image/half_d_model.PNG">까지를 대입해 <i>d<sub>model</sub></i>차원의 positional encoding vector를 얻게 된다. <i>k = 2i + 1</i>일 때는 cosine 함수를, <i>k = 2i</i>일 때는 sine 함수를 이용한다. 이렇게 positional encoding vector를 <i>pos</i>마다 구한다면 비록 같은 column이라고 할지라도 <i>pos</i>가 다르다면 다른 값을 가지게 된다. 즉, <i>pos</i>마다 다른 <i>pos</i>와 구분되는 positional encoding 값을 얻게 된다.
 </p>
@@ -127,8 +127,10 @@ Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단�
 <p>
    이 때 <i>PE<sub>pos+k</sub></i>는 <i>PE<sub>pos</sub></i>의 linear function으로 나타낼 수 있다. 표기를 간단히 하기 위해 <img src="./image/c.PNG">라고 해봅시다. 
 </p>
-<i>sin(a + b) = sin(a)cos(b) + cos(a)sin(b)</i> 이고   
-<i>cos(a + b) = cos(a)cos(b) - sin(a)sin(b)</i> 이므로 다음이 성립한다.   
+* <i>sin(a + b) = sin(a)cos(b) + cos(a)sin(b)</i>      
+* <i>cos(a + b) = cos(a)cos(b) - sin(a)sin(b)</i>
+위의 공식을 사용하여 다음과 같이 바꿀 수 있다.   
+
 <p align='center'><img src="./image/pos+k.PNG"></p>
 이런 성질 때문에 model이 relative position에 의해 attention하는 것을 더 쉽게 배울 수 있다.   
 논문에서는 학습된 positional embedding 대신 sinusoidal version을 선택했다. 만약 학습된 positional embedding을 사용할 경우 training보다 더 긴 sequence가 inference시에 입력으로 들어온다면 문제가 되지만 sinusoidal의 경우 constant하기 때문에 문제가 되지 않는다. 그냥 좀 더 많은 값을 계산하면 되기 때문이다.
