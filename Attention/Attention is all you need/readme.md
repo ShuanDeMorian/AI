@@ -156,7 +156,7 @@ Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단�
 <a href="https://arxiv.org/abs/1607.06450">Layer Normalization</a>이라는 논문에서 제시된 방법이다.
 <p align='center'><img src="./image/layer_normalization.PNG"></p>
 <p> 같은 layer에 있는 모든 hidden unit은 동일한 <img src="./image/mu.PNG">와 <img src="./image/sigma.PNG">를 공유한다.
-   그리고 현재 input <i>x<sup>t</sup></i>, 이전의 hidden state <i>h<sup>t-1</sup></i>, <i>a<sup>t</sup> = W<sub>hh</sub>h<sup>t-1</sup> + W<sub>xh</sub>x<sup>t</sup>, parameter <i> g,b </i>가 있을 때 다음과 같이 normalization을 해준다.</p>
+   그리고 현재 input <i>x<sup>t</sup></i>, 이전의 hidden state <i>h<sup>t-1</sup></i>, <i>a<sup>t</sup> = W<sub>hh</sub>h<sup>t-1</sup> + W<sub>xh</sub>x<sup>t</sup></i>, parameter <i> g,b </i>가 있을 때 다음과 같이 normalization을 해준다.</p>
 <p align='center'><img src="./image/h_t.PNG"></p>
 이렇게 한다면, gradient가 exploding하거나 vanishing하는 문제를 완화시키고 gradient 값이 안정적인 값을 가짐으로써 더 빨리 학습을 시킬 수 있다. (논문에서 recurrent를 기준으로 설명했으므로 이에 따름)
 
