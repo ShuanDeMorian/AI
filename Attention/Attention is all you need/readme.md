@@ -135,6 +135,33 @@ Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단�
 이런 성질 때문에 model이 relative position에 의해 attention하는 것을 더 쉽게 배울 수 있다.   
 논문에서는 학습된 positional embedding 대신 sinusoidal version을 선택했다. 만약 학습된 positional embedding을 사용할 경우 training보다 더 긴 sequence가 inference시에 입력으로 들어온다면 문제가 되지만 sinusoidal의 경우 constant하기 때문에 문제가 되지 않는다. 그냥 좀 더 많은 값을 계산하면 되기 때문이다.
 
+# Training
+## Optimizer
+많이 쓰이는 Adam optimizer를 사용했다. 특이한 점은 learning rate를 training동안 고정시키지 않고 다음 식에 따라 변화시켰다는 점이다.
+<p align='center'><img src="./image/learning_rate.PNG"></p>
+<p align='center'><img src="./image/lr_graph.png"></p>
+<i>warmup_step</i>까지는 linear하게 learning rate를 증가시키다가, <i>warmup_step</i> 이후에는 <i>step_num</i>의 inverse square root에 비례하도록 감소시킨다. 이렇게 하는 이유는 처음에는 학습이 잘 되지 않은 상태이므로 learning rate를 빠르게 증가시켜 변화를 크게 주다가, 학습이 꽤 됐을 시점에 learning rate를 천천히 감소시켜 변화를 작게 주기 위해서이다. 이렇게 할거면 learning rate를 증가시킬 필요 없이 그냥 처음부터 크게 주다가 줄여나가기만 하면 되는 게 아닌가 생각했었다. 찾아보니 learning rate가 증가하는 구간에서는 local minima에서 빠져나오기 쉽다고 한다.
+
+## Regularization
+### Residual Connection
+<a href="https://arxiv.org/abs/1603.05027">Identity Mappings in Deep Residual Networks</a>라는 논문에서 제시된 방법이고, 아래의 수식이 residual connection을 나타낸 것이다.
+<p align='center'><img src="./image/residual_connection.PNG"></p>
+이 때 <i>h(x<sub>l</sub>) = x<sub>l</sub></i>이다. 논문 제목에서 나온 것처럼 identity mapping을 해주는 것이다. 특정한 위치에서의 <i>x<sub>L</sub></i>을 다음과 같이 <i>x<sub>l</sub></i>과 residual 함수의 합으로 표시할 수 있습니다.
+<p align='center'><img src="./image/x_L.PNG"></p>
+그리고 미분을 한다면 다음과 같이 된다.
+<p align='center'><img src="./image/x_L미분.PNG"></p>
+<p>이 때, <img src="./image/de_dxl.PNG">은 상위 layer의 gradient 값이 변하지 않고 그대로 하위 layer에 전달되는 것을 보여준다. 즉, layer를 거칠수록 gradient가 사라지는 vanishing gradient 문제를 완화해주는 것이다. 또한 Forward path나 Backward path를 간단하게 표현할 수 있게 된다.
+
+### Layer Normalization
+<a href="https://arxiv.org/abs/1607.06450">Layer Normalization</a>이라는 논문에서 제시된 방법이다.
+<p align='center'><img src="./image/layer_normalization.PNG"></p>
+
+### Dropout
+### Label Smoothing
+
+# Conclusion
+Transformer는 recurrence를 이용하지 않고도 빠르고 정확하게 sequential data를 처리할 수 있는 model로 제시되었다. 여러가지 기법이 사용됐지만, 가장 핵심적인 것은 encoder와 decoder에서 attention을 통해 query와 가장 밀접한 연관성을 가지는 value를 강조할 수 있고 병렬화가 가능해진 것이다.
+
 # 참고자료
 1. 논문 - Attention Is All You Need : https://arxiv.org/abs/1706.03762
 2. Github - Attention Is All You Need 논문 리뷰 :  https://github.com/YBIGTA/DeepNLP-Study/wiki/Attention-Is-All-You-Need-%EB%85%BC%EB%AC%B8%EB%A6%AC%EB%B7%B0
