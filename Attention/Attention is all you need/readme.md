@@ -127,8 +127,8 @@ Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단�
 <p>
    이 때 <i>PE<sub>pos+k</sub></i>는 <i>PE<sub>pos</sub></i>의 linear function으로 나타낼 수 있다. 표기를 간단히 하기 위해 <img src="./image/c.PNG">라고 해봅시다. 
 </p>
-* <i>sin(a + b) = sin(a)cos(b) + cos(a)sin(b)</i>      
-* <i>cos(a + b) = cos(a)cos(b) - sin(a)sin(b)</i>
+<p align='center'><font size="4"><i>sin(a + b) = sin(a)cos(b) + cos(a)sin(b)</i></font></p>      
+<p align='center'><font size="4"><i>cos(a + b) = cos(a)cos(b) - sin(a)sin(b)</i></font></p>
 위의 공식을 사용하여 다음과 같이 바꿀 수 있다.   
 
 <p align='center'><img src="./image/pos+k.PNG"></p>
