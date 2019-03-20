@@ -105,7 +105,7 @@ encoder와 비슷하게 decoder에서도 self-attention을 줄 수 있다. 하�
 query들은 이전 decoder layer에서 오고 key와 value들은 encoder의 output에서 온다. 그래서 decoder의 모든 position에서 input sequence 즉, encoder output의 모든 position에 attention을 줄 수 있게 된다.   
 query가 decoder layer의 output인 이유는 <i>query</i>라는 것이 조건에 해당하기 때문이다. 좀 더 풀어서 설명하면, '지금 decoder에서 이런 값이 나왔는데 무엇이 output이 돼야 할까?'가 query인 것이다.   
 이 때 query는 이미 이전 layer에서 masking out됐으므로, i번째 position까지만 attention을 얻게 된다. 이 같은 과정은 sequence-to-sequence의 전형적인 encoder-decoder mechanisms를 따라한 것이다.   
-모든 position에서 attention을 줄 수 있다는 게 이해가 안되면 [링크](mlexplained.com/2017/12/29/attention-is-all-you-need-explained/)를 참고바람
+모든 position에서 attention을 줄 수 있다는 게 이해가 안되면 <a href='http://mlexplained.com/2017/12/29/attention-is-all-you-need-explained/'>링크</a>를 참고바람
 
 # Position-wise Feed-Forward Networks
 encoder와 decoder의 각각의 layer는 아래와 같은 fully connected feed-forward network를 포함하고 있다.
@@ -123,13 +123,13 @@ Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단�
 <p>
    <i>pos</i>는 position, <i>i</i>는 dimension이고 주기가 <img src="./image/cycle.png">인 삼각 함수이다. 즉, <i>pos</i>는 sequence에서 단어의 위치이고 해당 단어는 <i>i</i>에 0부터 <img src="./image/half_d_model.png">까지를 대입해 <i>d<sub>model</sub></i>차원의 positional encoding vector를 얻게 된다. <i>k = 2i + 1</i>일 때는 cosine 함수를, <i>k = 2i</i>일 때는 sine 함수를 이용한다. 이렇게 positional encoding vector를 <i>pos</i>마다 구한다면 비록 같은 column이라고 할지라도 <i>pos</i>가 다르다면 다른 값을 가지게 된다. 즉, <i>pos</i>마다 다른 <i>pos</i>와 구분되는 positional encoding 값을 얻게 된다.
 </p>
-<p align='center'><img src="./image/PE_pos.png"></p>
+<p align='center'><img src="./image/PE_pos.PNG"></p>
 <p>
-   이 때 <i>PE<sub>pos+k</sub></i>는 <i>PE<sub>pos</sub></i>의 linear function으로 나타낼 수 있다. 표기를 간단히 하기 위해 <img src="./image/c.png">라고 해봅시다. 
+   이 때 <i>PE<sub>pos+k</sub></i>는 <i>PE<sub>pos</sub></i>의 linear function으로 나타낼 수 있다. 표기를 간단히 하기 위해 <img src="./image/c.PNG">라고 해봅시다. 
 </p>
 <i>sin(a + b) = sin(a)cos(b) + cos(a)sin(b)</i> 이고   
 <i>cos(a + b) = cos(a)cos(b) - sin(a)sin(b)</i> 이므로 다음이 성립한다.   
-<p align='center'><img src="./image/pos+k.png"></p>
+<p align='center'><img src="./image/pos+k.PNG"></p>
 이런 성질 때문에 model이 relative position에 의해 attention하는 것을 더 쉽게 배울 수 있다.   
 논문에서는 학습된 positional embedding 대신 sinusoidal version을 선택했다. 만약 학습된 positional embedding을 사용할 경우 training보다 더 긴 sequence가 inference시에 입력으로 들어온다면 문제가 되지만 sinusoidal의 경우 constant하기 때문에 문제가 되지 않는다. 그냥 좀 더 많은 값을 계산하면 되기 때문이다.
 
