@@ -118,6 +118,17 @@ def key_value_func(query):
 >>> context_vector = attention(query = decoder_output, keys = encoder_outputs, values = encoder_outputs)
 ```
 
+어텐션을 추가한 sequence-to-sequence는 다음과 같다.
+<p align='center'><img src="./image/attention_seq2seq.png"></p>
+
+이 때 각 입력 파라미터들을 굉장히 거칠게 추상적으로 예상해 본다면, 다음과 같다. 물론 실제 뉴럴 네트워크 내부의 값은 이보다 훨씬 복잡하고 해석할 수 없는 값으로 채워져 있을 것이다.
+
+* decoder_output : 현재 time-step까지 번역된 대상 언어(target language)의 단어들 또는 문장, 의미
+* encdoer_outputs : 각 time-step에서의 소스 언어(source language) 단어 또는 문장, 의미
+
+신경망 내부의 각 차원들은 숨겨진 특징 값(latent feature)이므로 딱 잘라 정의할 수 없다. 하지만 분명한 건 소스 언어와 대상 언어가 애초에 다르다는 것이다. 따라서 단순히 벡터 내적을 해 주기보다는 소스 언어와 대상 언어 간에 연결고리를 하나 놓아주어야 할 것이다. 그래서 우리는 추상적으로 상상해 보았을 때, 두 언어가 각각 임베딩된 latent 공간이 선형(linear) 관계에 있다고 가정하고, 내적 연산을 수행하기 전에 선형 변환(linear transformation)을 해준다. 이 선형 변환을 위한 <i>W</i>값은 뉴럴 네트워크 웨이트 파라미터로서, 피드포워드(feed-forward) 및 back-propagation을 통해서 학습된다.
+<p align='center'><img src="./image/encoder_decoder_linear_mapping.png"></p>
+
 # Self-Attention
 
 "Attention is all you need' 논문에서 나온 개념으로 기존의 Attention과는 달리 Query가 input이다. 즉 자기 자신을 제일 잘 표현할 수 있는 input(key, value) pair를 찾고 그 결과가 가장 좋은 embedding이 된다. 
