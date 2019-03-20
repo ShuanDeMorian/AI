@@ -105,7 +105,7 @@ encoder와 비슷하게 decoder에서도 self-attention을 줄 수 있다. 하�
 query들은 이전 decoder layer에서 오고 key와 value들은 encoder의 output에서 온다. 그래서 decoder의 모든 position에서 input sequence 즉, encoder output의 모든 position에 attention을 줄 수 있게 된다.   
 query가 decoder layer의 output인 이유는 <i>query</i>라는 것이 조건에 해당하기 때문이다. 좀 더 풀어서 설명하면, '지금 decoder에서 이런 값이 나왔는데 무엇이 output이 돼야 할까?'가 query인 것이다.   
 이 때 query는 이미 이전 layer에서 masking out됐으므로, i번째 position까지만 attention을 얻게 된다. 이 같은 과정은 sequence-to-sequence의 전형적인 encoder-decoder mechanisms를 따라한 것이다.   
-모든 position에서 attention을 줄 수 있다는 게 이해가 안되면 ![링크](http://mlexplained.com/2017/12/29/attention-is-all-you-need-explained/)를 참고바람
+모든 position에서 attention을 줄 수 있다는 게 이해가 안되면 [링크](mlexplained.com/2017/12/29/attention-is-all-you-need-explained/)를 참고바람
 
 # Position-wise Feed-Forward Networks
 encoder와 decoder의 각각의 layer는 아래와 같은 fully connected feed-forward network를 포함하고 있다.
