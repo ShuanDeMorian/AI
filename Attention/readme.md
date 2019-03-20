@@ -15,7 +15,7 @@ Attention이란 위의 그림과 같이 사람이 그림을 볼 때 특정 부�
    
 Attention은 번역에도 활용할 수 있다. 위의 그림은 번역을 할 때 attention을 visualization한건데 어떤 단어에 집중 또는 단어 간의 관계로 볼 수도 있다. 선이 진할수록 관계도가 높은 것이다.   
    
-## Query, Key Value 
+## Query, Key, Value 
 
 Attention은 쿼리(Query)와 비슷한 값을 가진 키(Key)를 찾아서 그 값(Value)를 얻는 과정이다. 
 
