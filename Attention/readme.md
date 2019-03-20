@@ -15,13 +15,12 @@ Attention이란 위의 그림과 같이 사람이 그림을 볼 때 특정 부�
    
 Attention은 번역에도 활용할 수 있다. 위의 그림은 번역을 할 때 attention을 visualization한건데 어떤 단어에 집중 또는 단어 간의 관계로 볼 수도 있다. 선이 진할수록 관계도가 높은 것이다.   
    
-* Query   
-* Key
-* Value
+## Query, Key Value 
+
 Attention은 쿼리(Query)와 비슷한 값을 가진 키(Key)를 찾아서 그 값(Value)를 얻는 과정이다. 
 
 Key-Value는 개념은 컴퓨터 자료구조에서 볼 수 있다. 그 외 여러 곳에서도 쓰이는데 python의 Dictionary를 예시로 들면
-```dic = {'computer': 9, 'dog': 2, 'cat': 3}```
+```dic = {'computer': 9, 'dog': 2, 'cat': 3}```   
 Key와 Value에 해당하는 값을 저장해놓고 Key를 통해 Value 값에 접근할 수 있다. Query를 주고 그 Key값에 따라 Value 값에 접근할 수 있다.
 위의 작업을 함수로 나타낸다면 다음과 같이 표현할 수 있다.(이해를 돕기 위한 것으로 실제 파이썬 딕셔너리의 동작과는 다름)
 ```
@@ -48,8 +47,76 @@ def is_same(key, query):
    else:
       return .0
 ```
-코드를 살펴보면, 순차적으로 'dic'변수 내부의 key값들과 query값을 비교하여, key가 같을 경우 'weights'변수에 1.0을 더하고, 다를 경우에는 0을 더한다. 그리고 각 'weights'를 'weights'의 총 합으로 나누어 그 합이 1이 되도록 만들어 준다. 다시 'dic'내부의 value 값들과 'weights'의 값에 대해서 곱하여 더해줍니다. 즉, 'weight'가 1.0인 경우에만 value'값을 'answer'에 더한다.
+코드를 살펴보면, 순차적으로 'dic'변수 내부의 key값들과 query값을 비교하여, key가 같을 경우 'weights'변수에 1.0을 더하고, 다를 경우에는 0을 더한다. 그리고 각 'weights'를 'weights'의 총 합으로 나누어 그 합이 1이 되도록 만들어 준다.(자료구조에서 key는 유일성으로 중복되지 않아 어떤 쿼리와 일치하는 key는 1개보다 많을 수 없고 is_same함수로 같을 경우메만 1이고 아니면 0이므로 weights의 합은 항상 1이거나 0일 것이다. 그래서 이 과정은 여기서는 필요 없지만 다음에 나올 query와 key의 유사도를 계산하는 과정에서는 필요하다) 다시 'dic'내부의 value 값들과 'weights'의 값에 대해서 곱하여 더해줍니다. 즉, 'weight'가 1.0인 경우에만 value'값을 'answer'에 더한다.
 
+### 미분 가능한 Key-Value 함수
+
+좀 더 발전시켜서, 만약 is_same 함수 대신에 다른 함수를 써 보면 어떻게 될까? how_similar라는 key와 query 사이의 유사도를 반환하는 가상의 함수가 있다고 가정해보자.
+```
+>>> query = 'puppy'
+>>> how_similar('computer',query)
+0.1
+>>> how_similar('dog',query)
+0.9
+>>> how_similar('cat',query)
+0.7
+```
+이 함수를 이용해서 위에서 나온 key_value-func를 사용해서 다음과 같은 값이 나왔다고 하자(value는 dic 정의할 때의 그 값(dic = {'computer': 9, 'dog': 2, 'cat': 3})과 같다.
+```
+query = 'puppy'
+key_value_func(query)
+2.823 # = .1 / (.9 + .7 + .1) * 9 + .9 / (.9 + .7 + .1) * 2 + .7 / (.9 + .7 + .1) * 3
+```
+2.823이라는 값이 나왔다. 강아지와 고양이 그리고 컴퓨터의 유사도의 비율에 따른 'dic'의 값의 비율을 지녔다라고 볼 수 있다. is_same 함수를 쓸 때에는 두 값이 같은지 if문을 통해 검사하고 값을 할당했기 때문에, 미분을 할 수 없거나 할 수 있더라도 그래디언트가 0이 되었다. 하지만, 이제 우리는 key_value_func을 딥러닝에 사용할 수 있다.
+
+### 미분 가능한 Key-Value 벡터 함수
+만약, dic의 value에는 100차원의 벡터로 들어있었다면 어떻게 될까? 추가적으로 query와 key 값 모두 벡터를 다룬다면 어떻게 될까? 즉, 단어 임베딩 벡터라면? 그리고 how_similar 함수는 이 벡터들 간의 코사인 유사도(cosine similarity)를 반환해주는 함수라면? 마지막으로 dic의 key값과 value값이 서로 같다면 어떻게 될까?   
+   
+이를 위해서 다시 가상의 함수를 만들어보자. word2vec 함수는 단어를 입력으로 받아서 그 단어에 해당하는 미리 정해진 단어 임베딩 벡터를 반환해준다고 가정한다. 그러면 how_similar 함수는 두 벡터 간의 코사인 유사도 값을 반환할 것이다.
+```
+def key_value_func(query):
+   weights = []
+   
+   for key in dic.keys():
+      weights += [how_similar(key, query)] # cosine similarity 값을 계산하여 저장한다
+      
+   weights = softmax(weights)   # 모든 weight들을 구한 후에 softmax를 계산한다.
+   answer = 0
+   
+   for weight, value in zip(weights, dic.values()):
+      answer += weight * value
+     
+   return answer
+```
+여기서 softmax는 weights의 합의 크기를 1로 고정시키는 정규화 역할을 한다. 따라서 유사도의 총 합에서 차지하는 비율만큼 weight의 값이 채워진다.
+
+```
+>>> len(word2vec('computer'))
+100
+>>> word2vec('dog')
+[0.1, 0.3, -0.7, 0.0, ...
+>>> word2vec('cat')
+[0.15, 0.2, -0.3, 0.8, ...
+>>> dic = {word2vec('computer'): word2vec('computer'), word2vec('dog'): word2vec('dog'), word2vec('cat'): word2vec('cat')}
+>>>
+>>> query = 'puppy'
+>>> answer = key_value_func(word2vec(query))
+```
+이러한 코드를 실행하면 answer에는 어떤 벡터 값이 들어 있을 것이다. 그 벡터는 'puppy'벡터(query)와 'dog','computer','cat' 벡터들의 코사인 유사도에 따라서 값이 정해진다. 즉, 이 함수는 query와 비슷한 key값을 찾아서 비슷한 정도에 따라서 weight를 계산하고, softmax를 통해 정규화한 뒤, 각 key의 value값을 weight만큼 가져와서 모두 더하는 것이다. 이것이 바로 어텐션이 하는 역할이다.   
+실제 식을 살펴보면 다음과 같은데   
+<p align='center'><img src="./image/scaled_dot-product_attention.jpg"></p>
+위 함수와 매우 유사함을 알 수 있다. 결과값으로 나온 attention은 벡터로서 sequence에서 각 position에 얼마나 주의 깊게 봐야하는지(가중치를 줘야하는지) 값을 나타내는 벡터로 해석할 수 있다.
+
+## 기계번역에서의 Attention
+그럼 번역에서 Attention은 어떻게 작용할까? 번역 과정에서는 인코더의 각 time-step별 출력을 Key와 Value로 삼고, 현재 time-step의 디코더 출력을 Query로 삼아 Attention을 계산한다.
+   
+* Query : 현재 time-step의 디코더의 출력
+* Keys : 각 time-step별 인코더의 출력
+* Values : 각 time-stpe별 인코더의 출력
+
+```
+>>> context_vector = attention(query = decoder_output, keys = encoder_outputs, values = encoder_outputs)
+```
 
 # Self-Attention
 
