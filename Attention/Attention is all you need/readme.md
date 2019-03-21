@@ -2,6 +2,8 @@
 논문 : https://arxiv.org/abs/1706.03762   
 WMT 2014 English-to-German(en-de) translation task에서 state-of-the-art 
 
+코드 출처 : https://github.com/jadore801120/attention-is-all-you-need-pytorch
+
 # Motivation
 "I arrived at the bank after crossing the..."   
 이런 문장에서 "bank"의 가장 적합한 의미와 적절한 표현을 학습하려면, 문장이 "...road"로 끝나는지, 아니면 "...river"로 끝나는지를 알아야 한다. (bank는 강둑이라는 의미와 은행이라는 의미를 둘 다 가지고 있음)
