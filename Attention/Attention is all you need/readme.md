@@ -4,6 +4,32 @@ WMT 2014 English-to-German(en-de) translation task에서 state-of-the-art
 
 코드 출처 : https://github.com/jadore801120/attention-is-all-you-need-pytorch
 
+## 코드 사용법
+1. Download the data
+```
+training : http://www.quest.dcs.shef.ac.uk/wmt16_files_mmt/training.tar.gz
+validation : http://www.quest.dcs.shef.ac.uk/wmt16_files_mmt/validation.tar.gz
+test : http://www.quest.dcs.shef.ac.uk/wmt16_files_mmt/mmt16_task1_test.tar.gz
+```
+data/multi30k 안에 모두 다 압축을 풀어준다.   
+
+2. Preprocess the data
+```
+python preprocess.py -train_src data/multi30k/train.en.atok -train_tgt data/multi30k/train.de.atok -valid_src data/multi30k/val.en.atok -valid_tgt data/multi30k/val.de.atok -save_data data/multi30k.atok.low.pt
+```
+
+3. Train the model
+```
+python train.py -data data/multi30k.atok.low.pt -save_model trained -save_mode best -proj_share_weight -label_smoothing
+```
+
+4. Test the model
+```
+python translate.py -model trained.chkpt -vocab data/multi30k.atok.low.pt -src data/multi30k/test.en.atok -no_cuda
+```
+   
+자세한 건 코드 출처 참고 
+
 # Motivation
 "I arrived at the bank after crossing the..."   
 이런 문장에서 "bank"의 가장 적합한 의미와 적절한 표현을 학습하려면, 문장이 "...road"로 끝나는지, 아니면 "...river"로 끝나는지를 알아야 한다. (bank는 강둑이라는 의미와 은행이라는 의미를 둘 다 가지고 있음)
