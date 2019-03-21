@@ -167,8 +167,18 @@ Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단�
 이렇게 한다면, gradient가 exploding하거나 vanishing하는 문제를 완화시키고 gradient 값이 안정적인 값을 가짐으로써 더 빨리 학습을 시킬 수 있다. (논문에서 recurrent를 기준으로 설명했으므로 이에 따름)
 
 ### Dropout
-### Label Smoothing
+<a href="http://jmlr.org/papers/volume15/srivastava14a.old/srivastava14a.pdf">Dropout: a simple way to prevent neural networks from overfitting</a>이라는 논문에서 제시된 방법이다.   
+<p align='center'><img src="./image/dropout.PNG"></p>
+dropout이라는 용어는 neural network에서 unit들을 dropout하는 것을 가리킨다. 즉, 해당 unit을 network에서 일시적으로 제거하는 것이다. 그래서 다른 unit과의 모든 connection이 사라지게 된다. 어떤 unit을 dropout할지는 random하게 정한다.   
+dropout은 training data에 overfitting되는 문제를 어느정도 막아준다. dropout된 unit들은 training되지 않는 것이니 training data에 값이 조정되지 않기 때문이다.
 
+### Label Smoothing
+<a href="https://arxiv.org/pdf/1512.00567.pdf">Rethinking the inception architecture for computer vision</a>이라는 논문에서 제시된 방법이다.   
+training동안 실제 정답인 label의 logit은 다른 logit보다 훨씬 큰 값을 갖게 된다. 이렇게 해서 model이 주어진 input x에 대한 label y를 맞추는 것이다. 하지만 이렇게 된다면 문제가 발생한다. overfitting될수도 있고 가장 큰 logit을 가지는 것과 나머지 사이의 차이를 점점 크게 만든다. 결국 model이 다른 data에 적응하는 능력을 감소시킨다.   
+<p>model이 덜 confident하게 만들기 위해, label distribution <img src="./image/label_distribution.PNG">(k가 y일 경우 1, 나머지는 0)를 다음과 같이 대체할 수 있다. </p>
+<p align='center'><img src="./image/new_label_distribution.PNG"></p>
+각각 label에 대한 분포 ,u(k), smoothing parameter 입실론이다. 위와 같다면, k=y인 경우에도 model은 p(y|x)=1이 아니라 p(y|x) = (1-입실론)이 된다. 100%의 확신이 아닌 그보다 덜한 확신을 하게 되는 것이다.   
+   
 # Conclusion
 Transformer는 recurrence를 이용하지 않고도 빠르고 정확하게 sequential data를 처리할 수 있는 model로 제시되었다. 여러가지 기법이 사용됐지만, 가장 핵심적인 것은 encoder와 decoder에서 attention을 통해 query와 가장 밀접한 연관성을 가지는 value를 강조할 수 있고 병렬화가 가능해진 것이다.
 
