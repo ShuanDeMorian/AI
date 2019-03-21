@@ -29,6 +29,12 @@ python translate.py -model trained.chkpt -vocab data/multi30k.atok.low.pt -src d
 ```
    
 자세한 건 코드 출처 참고 
+   
+30 Epoch 학습 결과 : 
+```
+- (Training)   ppl:  9.15587, accuracy: 71.383 %, elapse: 1.292 min
+- (Validation) ppl:  10.47957, accuracy: 53.342 %, elapse: 0.025 min
+```
 
 # Motivation
 "I arrived at the bank after crossing the..."   
@@ -45,6 +51,8 @@ RNN은 물론 순차적으로 언어를 처리하는 과정에서 서로 멀리 
 
 즉, 기존에 cnn과 rnn, attention을 사용하던 걸 attention만 사용하자는 것이다. 논문에서는 Attention만 사용하는 간단한 신경망 구조(Transformer)를 통해 기계 번역 분야(특히, 영어에서 독일어로 번역)에서 state-of-the-art 성능을 얻음과 동시에 computation cost를 줄일 수 있었다고 한다.   
    
+대부분의 sequence를 다루는 모델들은 encoder-decoder 구조로 되어있다. 여기서 encoder는 input sequence를 continuous한 representations로 바꾸고 decoder는 이 representation을 통해 output을 만들어낸다.   
+      
 Transformer는 훨씬 작은 상수의 스텝만을 가지며(O(1)이라는 뜻) 각각의 스텝에서 self-attention 메커니즘은 문장의 모든 단어에 대해서 직접적인 관계를 모델링하며, 이 때는 각각의 개별 포지션과는 무관하다. 즉 "bank"의 의미를 식별하기 위해서 Transformer의 경우 "river"라는 단어를 <strong>즉각적으로</strong> 참고하는 방법을 배울 수 있으며, 단일 스텝 내에서 이 결정을 하게 된다.   
 Transformer에서는 학습 시 encoder에서는 각각의 position에 대해, 즉 각각의 단어에 대해 attention을 해주기만 하고, decoder에서는 masking 기법을 이용해 병렬 처리가 가능하게 된다. decoderdptjsms decoder에서는 encoder와 달리 순차적으로 겨로가를 만들어내야 하기 때문에, self-attention을 변형하여 masking을 해준다. masking을 통해 position i보다 이후에 있는 position에 attention을 주지 못하게 한다. 즉, position i에 대한 예측은 미리 알고 있는 output들에만 의존을 하는 것이다.
 
@@ -88,7 +96,15 @@ embedding 값을 고정시키지 않고, 학습을 하면서 embedding값이 변
 <img src="./image/scaled_dot-product_attention.jpg">
 </p>
 <p>
-먼저 input은 <i>d<sub>k</sub></i> dimension의 query와 key들, <i>d<sub>v</sub></i> dimension의 value들로 이루어져 있다. 이 때 모든 query와 key에 대한 dot-product를 계산하고 각각을 <img src="./image/sqrt_dk.gif">로 나누어준다. dot-product를 하고 <img src="./image/sqrt_dk.gif">으로 scaling을 해주기 때문에 Scaled Dot-Product Attention인 것이다. 그리고 여기에 softmax를 적용해 value들에 대한 weights를 얻어낸다. 
+먼저 input은 <i>d<sub>k</sub></i> dimension의 query와 key들, <i>d<sub>v</sub></i> dimension의 value들로 이루어져 있다. 우선 하나의 query에 대해 모든 key들과 dot product를 한 뒤 각 값을 <img src="./image/sqrt_dk.gif">로 나누어준다. 이러한 작업을 모든 query에서 수행한다. 실제로 계산할 때는 query, key, value를 vector 하나하나 계산하는 것이 아니라 여러 개를 matrix로 만들어 계산한다. dot-product를 하고 <img src="./image/sqrt_dk.gif">으로 scaling을 해주기 때문에 Scaled Dot-Product Attention인 것이다. 그리고 여기에 softmax를 적용해 value들에 대한 weights를 얻어낸다. 
+   
+추가적인 설명 : 우선 query와 key, value에 대해서 설명하면 query가 어떤 단어와 관련되어 있는지 찾기 위해서 모든 key들과 연산한다. 여기서 실제 연산을 보면 query와 key를 dot-product한 뒤 softmax를 취하는 데, 의미하는 것은 하나의 query가 모든 key들과 연관성을 계산한 뒤 그 값들을 확률 값으로 만들어주는 것이다. 따라서 query가 어떤 key와 높은 확률로 연관성을 가지는지 알게 되는 것이다. 이제 구한 확률값을 value에 곱해서 value에 대해 scaling한다고 생각하면 된다.   
+
+추가적인 설명: key와 value는 사실상 같은 단어를 의미한다. 하지만 두개로 나눈 이유는 key값을 위한 vector와 value를 위한 vector를 따로 만들어 사용하기 위함이다. key를 통해서는 각 단어와 연관성의 확률을 계산하고 value는 그 확률을 사용해서 attention 값을 계산하는 용도이다.   
+   
+rescaling하는 부분을 보자. 만약 dimension의 루트값으로 나눠주지 않는다면 어떤 일이 생길까? vector의 길이가 길어질수록, 즉 dimension이 커질수록 자연스럽게 dot-product값은 점점 더 커질 것이다. 그러나 이후에 softmax함수가 있기 때문에 back-propagation 과정에서도 미분값이 조금만 넘어오게 되서 상대적으로 학습이 느려지거나 학습이 잘 안되는 상황이 발생할 수 있다. 따라서 dimension이 큰 경우를 대비해 dimension의 루트값으로 나눠준다.   
+
+
 </p>
 <p>
 key와 value는 attention이 이루어지는 위치에 상관없이 같은 값을 갖게 된다. 이 때 query와 key에 대한 dot-product를 계산하면 각각의 query와 key 사이의 유사도를 구할 수 있게 된다. 흔히 들어본 cosine similarity는 dot-product에서 vector의 magnitude로 나눈 것이다. <img src="./image/sqrt_dk.gif">로 scaling을 해주는 이유는 dot-products의 값이 커질수록 softmax 함수에서 기울기의 변화가 거의 없는 부분으로 가기 때문이다.
@@ -110,19 +126,35 @@ where <img width="40%" src="./image/head_i.gif">
 <img src="./image/multi_head.png">
 </p>
 
-<i>d<sub>model</sub></i> dimension의 key, value, query들로 하나의 attention을 수행하는 대신 key, value, query들에 각각 다른 학습된 linear projection을 h번 수행하는 게 더 좋다고 한다. 즉, 동일한 Q,K,V에 각각 다른 weight matrix <i>W</i>를 곱해주는 것이다. 이 때 parameter matrix는 다음과 같다.
+<i>d<sub>model</sub></i> dimension의 key, value, query들로 하나의 attention을 수행하는 대신 key, value, query들에 각각 다른 학습된 linear projection을 h번 수행하는 게 더 좋다고 한다. 즉, 동일한 Q,K,V에 각각 다른 weight matrix <i>W</i>를 곱해주는 것이다. 전체 dimension을 h로 나눠서 attention을 h번 적용시키는 방법이다.   
+   
+각 query, key, value의 vector는 linearly하게 h개로 project된다. 이후 각각 나눠서 attention을 시킨 후 만들어진 h개의 vector를 concat하면 된다. 마지막으로 vector의 dimension을 <i>d<sub>model</sub></i>로 다시 맞춰주도록 matrix를 곱하면 끝난다. 
+
+각 parameter의 shape는 다음과 같다.
 <p align='center'><img width="15%" src="./image/W_i^Q.gif"></p>
 <p align='center'><img width="15%" src="./image/W_i^K.gif"></p>
 <p align='center'><img width="15%" src="./image/W_i^V.gif"></p>
 <p align='center'><img width="15%" src="./image/W_i^O.gif"></p>
-순서대로 query, key, value, output에 대한 parameter matrix이다. projection이라고 하는 이유는 각각의 값들이 parameter matrix와 곱해졌을 때 <i>d<sub>k</sub></i>, <i>d<sub>v</sub></i>, <i>d<sub>model</sub></i> 차원으로 project되기 때문입니다.   
-논문에서는 <i>d<sub>k</sub></i> = <i>d<sub>v</sub></i> = <i>d<sub>model</sub></i>/h를 사용했는데 꼭 <i>d<sub>k</sub></i>와 <i>d<sub>v</sub></i>가 같을 필요는 없습니다.   
+순서대로 query, key, value, output에 대한 parameter matrix이다. projection이라고 하는 이유는 각각의 값들이 parameter matrix와 곱해졌을 때 <i>d<sub>k</sub></i>, <i>d<sub>v</sub></i>, <i>d<sub>model</sub></i> 차원으로 project되기 때문이다.   
+논문에서는 <i>d<sub>k</sub></i> = <i>d<sub>v</sub></i> = <i>d<sub>model</sub></i>/h를 사용했는데 꼭 <i>d<sub>k</sub></i>와 <i>d<sub>v</sub></i>가 같을 필요는 없다.   
 이렇게 project된 key, value, query들은 병렬적으로 attention function을 거쳐 <i>d<sub>v</sub></i> dimension output값으로 나오게 된다.   
 그 다음 여러 개의 head를 concatenate하고 다시 projection을 수행한다. 그리하여 최종적인 <i>d<sub>model</sub></i> dimension output값이 나오게 된다. 각각의 과정에서 dimension을 표현하면 다음과 같다.
 <p align='center'><img src="./image/calculate_dimension.png"></p>
 <p align='center'><i>d<sub>Q</sub></i>, <i>d<sub>K</sub></i>, <i>d<sub>V</sub></i>는 각각 query, key, value</p> 
+   
+해당 논문에서는 h = 8 즉 8개의 head를 사용했다. 따라서 각 vector들의 dimension은 다음과 같이 8로 나눠진다.   
+<p align='center'> <i>d<sub>k</sub></i> = <i>d<sub>v</sub></i> = <i>d<sub>model</sub></i>/h = 64 <strong></strong></p>
+h번 계산했지만 각 head들이 dimension이 줄었기 때문에 전체 연산량은 비슷하다. 
 
 # Self-Attention
+이 모델에서 recurrent나 convolution을 사용하지 않고 self-attention만을 사용한 이유에 대해서 알아보자. 3가지 이유로 self-attention을 선택했다.   
+   
+* 레이어당 전체 연산량이 줄어든다.
+* 병렬화가 가능한 연산이 늘어난다.
+* long-range의 term들의 dependency도 잘 학습할 수 있게 된다.
+   
+그리고 위의 3가지 외에 또 다른 이유는 attention을 사용하면 모델 자체의 동작을 해석하기 쉬워진다는(interpretable) 장점 때문이다. attention 하나의 동작 뿐만 아니라 multi-head의 동작 또한 어떻게 동작하는지 이해하기 쉽다는 장점이 있다.    
+
 ## encoder self-attention layer
 <p align='center'><img src="./image/encoder_self_attention.png"></p>
 key, value,s query들은 모두 encoder의 이전 layer의 output에서 온다. 따라서 이전 layer의 모든 position에 attention을 줄 수 있다. 만약 첫 번째 layer라면 positional encoding이 더해진 input embedding이 된다.
@@ -137,6 +169,8 @@ encoder와 비슷하게 decoder에서도 self-attention을 줄 수 있다. 하�
 query들은 이전 decoder layer에서 오고 key와 value들은 encoder의 output에서 온다. 그래서 decoder의 모든 position에서 input sequence 즉, encoder output의 모든 position에 attention을 줄 수 있게 된다.   
 query가 decoder layer의 output인 이유는 <i>query</i>라는 것이 조건에 해당하기 때문이다. 좀 더 풀어서 설명하면, '지금 decoder에서 이런 값이 나왔는데 무엇이 output이 돼야 할까?'가 query인 것이다.   
 이 때 query는 이미 이전 layer에서 masking out됐으므로, i번째 position까지만 attention을 얻게 된다. 이 같은 과정은 sequence-to-sequence의 전형적인 encoder-decoder mechanisms를 따라한 것이다.   
+encoder는 self-attention layer를 가진다. 모든 key, value, query는 같은 sequence에서 온다. 정확히는 이전 layer의 output에서 온다. 따라서 encoder는 이전 layer의 전체 위치를 attend할 수 있다.   
+decoder의 self-attention layer도 이전 layer의 모든 position을 attend할 수 있는데, 정확히는 자신의 position 이전의 position까지만 attend할 수 있다. 직관적으로 이해하면 sequence에서 앞의 정보만을 참고할 수 있게 한 것이다. 이러한 목적을 scaled dot-product를 masking 함으로써 구현했다.   
 모든 position에서 attention을 줄 수 있다는 게 이해가 안되면 <a href='http://mlexplained.com/2017/12/29/attention-is-all-you-need-explained/'>링크</a>를 참고바람
 
 # Position-wise Feed-Forward Networks
@@ -147,8 +181,11 @@ position마다, 즉 개별 단어마다 적용되기 때문에 position-wise이�
 <p align='center'><img src="./image/ffn.png"></p>
 <p>x에 linear transformation을 적용한 뒤, <img src="./image/ReLU.gif">를 거쳐 다시 한 번 linear transformation을 적용한다. <i>W,b</i>의 아래 첨자가 다른 것에서 볼 수 있듯이 같은 형태지만 layer가 달라지면 다른 parameter를 사용한다. kernel size가 1이고 channel이 layer인 convolution을 두 번 수행한 것으로도 위 과정을 이해할 수 있다. 
 
+# Embeddings and Softmax
+다른 sequence 모델과 유사하게 embedding vector를 사용한다. 입력 token을 linear transformation해서 <i>d<sub>model</sub></i> dimension vector로 바꿔주고 softmax로 나온 decoder의 결과 값을 predicted next-token으로 다시 linear transformation해서 바꿔준다. 모델 전체를 보면 3번 embedding 과정(역 embedding 포함)이 있는데, 이 때 linear transformation에 사용되는 weight matrix는 다 같은 matrix를 사용한다. 즉 2개의 embedding layer에서의 linear transformation과 softmax 다음의 linear transformation에서 같은 matrix를 사용하는 것이다.
+
 # Positional Encoding
-Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단어의 position 정보를 저장해줄 필요가 있다. 그래서 encoder와 decoder의 input embedding에 positional encoding을 더해주었다. positional encoding은 <i>d<sub>model</sub></i>(embedding 차원)과 같은 차원을 갖기 때문에 positional encoding vector와 embedding vector는 더해질 수 있다.   
+Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단어의 position 정보를 저장해줄 필요가 있다. 각 위치에 대해서 embedding과 동일한 dimension을 가지도록 encoding을 해준 뒤 그 값을 embedding값과 더해서 사용한다. 그래서 encoder와 decoder의 input embedding에 positional encoding을 더해주었다. positional encoding은 <i>d<sub>model</sub></i>(embedding 차원)과 같은 차원을 갖기 때문에 positional encoding vector와 embedding vector는 더해질 수 있다.   
 논문에서는 다른 frequency를 가지는 sine과 cosine 함수를 이용했다. 
 * 주어진 구간내에서 완료되는 cycle의 개수
 <p align='center'><img src="./image/positional_encoding_equation.PNG"></p>
@@ -168,6 +205,9 @@ Transformers는 recurrence도 아니고 convolution도 아니기 때문에, 단�
 논문에서는 학습된 positional embedding 대신 sinusoidal version을 선택했다. 만약 학습된 positional embedding을 사용할 경우 training보다 더 긴 sequence가 inference시에 입력으로 들어온다면 문제가 되지만 sinusoidal의 경우 constant하기 때문에 문제가 되지 않는다. 그냥 좀 더 많은 값을 계산하면 되기 때문이다.
 
 # Training
+## Training data and batching
+학습에 사용된 데이터는 WMT 2014 English-German 데이터 셋이다. 총 450만개의 영어-독일어 문장 쌍이 있다. 그리고 WMT 2014 English-French 데이터 셋도 사용했다. 총 360만개의 문장 쌍이 있다. 학습시 대략 25000개의 token을 포함하는 문장 쌍을 하나의 배치로 사용했다.
+
 ## Optimizer
 많이 쓰이는 Adam optimizer를 사용했다. 특이한 점은 learning rate를 training동안 고정시키지 않고 다음 식에 따라 변화시켰다는 점이다.
 <p align='center'><img src="./image/learning_rate.PNG"></p>
@@ -221,3 +261,4 @@ Transformer는 recurrence를 이용하지 않고도 빠르고 정확하게 seque
 10. Github-Attention is all you need, keras 구현 : https://github.com/Lsdefine/attention-is-all-you-need-keras/blob/master/transformer.py
 11. 어텐션 메커니즘 - https://ratsgo.github.io/from%20frequency%20to%20semantics/2017/10/06/attention/
 12. Attention is all you need paper 뽀개기 : https://pozalabs.github.io/transformer/
+13. Transformer: Attention is all you need : https://reniew.github.io/43/
