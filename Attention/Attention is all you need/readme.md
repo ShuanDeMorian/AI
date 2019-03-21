@@ -28,7 +28,7 @@ python train.py -data data/multi30k.atok.low.pt -save_model trained -save_mode b
 python translate.py -model trained.chkpt -vocab data/multi30k.atok.low.pt -src data/multi30k/test.en.atok -no_cuda
 ```
    
-자세한 건 코드 
+자세한 건 코드 출처 참고 
 
 # Motivation
 "I arrived at the bank after crossing the..."   
