@@ -1,5 +1,5 @@
 # Attention is All You Need
-논문 : https://arxiv.org/abs/1706.03762
+논문 : https://arxiv.org/abs/1706.03762   
 WMT 2014 English-to-German(en-de) translation task에서 state-of-the-art 
 
 # Motivation
