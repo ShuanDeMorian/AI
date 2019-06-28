@@ -5,4 +5,5 @@ Attention/Attention is all you need/data/multi30k/train.en
 Attention/Attention is all you need/data/multi30k/train.de
 Attention/Attention is all you need/data/multi30k/test.en
 Attention/Attention is all you need/data/multi30k/test.de
+Summarization/Get to the point/data/finished_files/chunked/test_000.bin
 Attention/Attention is all you need/trained.chkpt
