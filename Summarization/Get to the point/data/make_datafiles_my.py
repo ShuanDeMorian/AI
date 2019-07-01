@@ -16,9 +16,9 @@ END_TOKENS = ['.', '!', '?', '...', "'", "`", '"', dm_single_close_quote, dm_dou
 SENTENCE_START = '<s>'
 SENTENCE_END = '</s>'
 
-all_train_urls = "url_lists/all_train.txt"
-all_val_urls = "url_lists/all_val.txt"
-all_test_urls = "url_lists/all_test.txt"
+all_train_urls = "data/url_lists/all_train.txt"
+all_val_urls = "data/url_lists/all_val.txt"
+all_test_urls = "data/url_lists/all_test.txt"
 
 cnn_tokenized_stories_dir = "my_stories_tokenized"
 # dm_tokenized_stories_dir = "dm_stories_tokenized"
