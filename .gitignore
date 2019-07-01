@@ -483,3 +483,19 @@ Summarization/Get to the point/data/my_data/videoId/ZtLnfkV1TZk.json
 Summarization/Get to the point/data/my_data/videoId/ZyHku3usXzY.json
 Summarization/Get to the point/data/my_data/videoId/ZZJnsxlSk1w.json
 Attention/Attention is all you need/trained.chkpt
+*.lang2
+*.lang1
+*.fr
+*.en
+*.es
+*.de
+*.cs
+*.zh
+*.ru
+*.tgz
+*.gz
+*.sgm
+*.hi
+*.swp
+*.annotation
+*.subwords
